@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clock-in — UI mockups</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #020617; }
+    .phone {
+      width: 320px;
+      height: 640px;
+      border-radius: 36px;
+      background: #0f172a;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6), inset 0 0 0 8px #1e293b;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .phone .notch {
+      width: 120px; height: 22px; background: #000;
+      border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      z-index: 10;
+    }
+    .phone .screen { flex: 1; padding: 36px 20px 16px; display: flex; flex-direction: column; }
+    .phone .tabbar {
+      display: flex; justify-content: space-around;
+      border-top: 1px solid #1e293b;
+      padding: 10px 0 14px;
+      background: #0f172a;
+    }
+    .phone .tabbar a { color: #64748b; font-size: 12px; }
+    .phone .tabbar a.active { color: #f8fafc; font-weight: 600; }
+    .browser {
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      background: #0f172a;
+      max-width: 1120px; margin: 0 auto;
+    }
+    .browser .chrome {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 14px; background: #1e293b;
+    }
+    .browser .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .browser .url {
+      margin-left: 12px; flex: 1; background: #0f172a;
+      color: #94a3b8; padding: 6px 12px; border-radius: 6px;
+      font-family: ui-monospace, monospace; font-size: 12px;
+    }
+    .caption { color: #94a3b8; text-align: center; margin-top: 12px; font-size: 13px; }
+  </style>
+</head>
+<body class="text-slate-100 font-sans">
+
+<header class="max-w-6xl mx-auto px-6 py-10 text-center">
+  <h1 class="text-4xl font-bold">Clock-in — UI mockups</h1>
+  <p class="text-slate-400 mt-2">Static reference of every screen. Same Tailwind classes the real app uses.</p>
+</header>
+
+<!-- ────────────────────────────────  MOBILE  ──────────────────────────────── -->
+<section class="max-w-6xl mx-auto px-6 py-10">
+  <h2 class="text-2xl font-semibold mb-8">Mobile (Expo)</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 justify-items-center">
+
+    <!-- ─── LOGIN ─── -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen justify-center">
+          <h1 class="text-4xl font-bold text-center">Clock-in</h1>
+          <p class="text-slate-400 text-center mt-1 mb-8 text-sm">Sign in to start your shift</p>
+          <input class="bg-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm mb-3" value="employee@example.com" readonly />
+          <input class="bg-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm mb-4" value="••••••••••" readonly />
+          <button class="bg-blue-600 py-4 rounded-xl font-semibold">Sign in</button>
+        </div>
+      </div>
+      <p class="caption">Login</p>
+    </div>
+
+    <!-- ─── HOME — CLOCKED OUT ─── -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen justify-center">
+          <div class="text-center mb-12">
+            <p class="text-xl font-semibold">Hi Sample Employee</p>
+            <p class="text-slate-300 text-sm mt-2">Not clocked in</p>
+          </div>
+          <button class="bg-green-600 py-7 rounded-2xl text-xl font-bold">Clock In</button>
+        </div>
+        <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
+      </div>
+      <p class="caption">Home — clocked out</p>
+    </div>
+
+    <!-- ─── HOME — CLOCKED IN ─── -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen justify-center">
+          <div class="text-center mb-10">
+            <p class="text-xl font-semibold">Hi Sample Employee</p>
+            <p class="text-slate-300 text-sm mt-2">Clocked in • 2 hours</p>
+            <p class="text-slate-400 text-xs mt-1">since 9:14 AM</p>
+          </div>
+          <button class="bg-amber-500 py-6 rounded-2xl text-lg font-bold mb-3">Start Break</button>
+          <button class="bg-red-600 py-6 rounded-2xl text-lg font-bold">Clock Out</button>
+        </div>
+        <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
+      </div>
+      <p class="caption">Home — working</p>
+    </div>
+
+    <!-- ─── HOME — ON BREAK ─── -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen justify-center">
+          <div class="text-center mb-8">
+            <p class="text-xl font-semibold">Hi Sample Employee</p>
+            <p class="text-slate-300 text-sm mt-2">Clocked in • 4 hours</p>
+          </div>
+          <div class="bg-slate-800 rounded-2xl p-8 text-center">
+            <p class="text-slate-400 text-xs uppercase tracking-widest">On break</p>
+            <p class="text-6xl font-bold my-2 tabular-nums">17:42</p>
+            <p class="text-slate-400 text-sm">remaining</p>
+            <button class="bg-slate-700 px-6 py-3 rounded-lg text-sm font-semibold mt-4">End break now</button>
+          </div>
+        </div>
+        <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
+      </div>
+      <p class="caption">Home — on break (live countdown)</p>
+    </div>
+
+    <!-- ─── SETTINGS ─── -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="mb-8">
+            <p class="text-slate-400 text-xs uppercase tracking-widest">Signed in as</p>
+            <p class="text-lg mt-1">employee@example.com</p>
+            <p class="text-slate-400 text-sm">Employee</p>
+          </div>
+          <div class="mb-6">
+            <p class="text-base font-semibold mb-3">Change password</p>
+            <input class="bg-slate-800 px-4 py-3 rounded-xl text-sm w-full mb-3" value="••••••••" readonly />
+            <input class="bg-slate-800 px-4 py-3 rounded-xl text-sm w-full mb-3" value="••••••••" readonly />
+            <button class="bg-blue-600 py-4 rounded-xl font-semibold w-full">Update password</button>
+          </div>
+          <div class="mt-auto mb-2">
+            <button class="bg-red-600 py-4 rounded-xl font-semibold w-full">Log out</button>
+          </div>
+        </div>
+        <div class="tabbar"><a>Home</a><a class="active">Settings</a></div>
+      </div>
+      <p class="caption">Settings</p>
+    </div>
+
+    <!-- ─── ADMIN TAB ─── -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <p class="text-2xl font-bold mt-2">Today</p>
+          <p class="text-slate-400 text-sm mt-1 mb-4">Full editing on the web dashboard.</p>
+          <div class="space-y-3">
+            <div class="bg-slate-800 rounded-xl p-4">
+              <p class="font-semibold">Sample Employee</p>
+              <p class="text-slate-300 text-xs mt-1">In 9:14 AM • Out 5:00 PM</p>
+            </div>
+            <div class="bg-slate-800 rounded-xl p-4">
+              <p class="font-semibold">Jane Smith</p>
+              <p class="text-slate-300 text-xs mt-1">In 8:42 AM • still working</p>
+            </div>
+            <div class="bg-slate-800 rounded-xl p-4">
+              <p class="font-semibold">Admin User</p>
+              <p class="text-slate-300 text-xs mt-1">In 8:30 AM • Out 4:01 PM</p>
+            </div>
+          </div>
+        </div>
+        <div class="tabbar"><a>Home</a><a class="active">Admin</a><a>Settings</a></div>
+      </div>
+      <p class="caption">Admin tab (admins only)</p>
+    </div>
+  </div>
+</section>
+
+<!-- Notification toast example -->
+<section class="max-w-md mx-auto px-6 mt-4 mb-12">
+  <div class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 flex gap-3 items-start">
+    <div class="text-2xl">🔔</div>
+    <div>
+      <p class="font-semibold">Clock-in</p>
+      <p class="font-medium mt-0.5">Break is over</p>
+      <p class="text-sm text-slate-300">Your 30-minute break has ended.</p>
+    </div>
+  </div>
+  <p class="caption">System notification (also fires after the 7.5h shift reminder)</p>
+</section>
+
+<!-- ────────────────────────────────  WEB ADMIN  ──────────────────────────────── -->
+<section class="max-w-6xl mx-auto px-6 py-10">
+  <h2 class="text-2xl font-semibold mb-8">Web admin (Next.js)</h2>
+
+  <!-- ─── WEB LOGIN ─── -->
+  <div class="browser mb-16">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/login</div>
+    </div>
+    <div class="bg-slate-900 px-6 py-20 flex justify-center">
+      <div class="w-full max-w-sm bg-slate-800 p-8 rounded-2xl shadow-xl space-y-4">
+        <div>
+          <h1 class="text-3xl font-bold">Clock-in admin</h1>
+          <p class="text-slate-400 text-sm mt-1">Sign in to manage records.</p>
+        </div>
+        <input class="w-full rounded-lg bg-slate-900 px-4 py-3 ring-1 ring-slate-700" value="admin@example.com" readonly />
+        <input class="w-full rounded-lg bg-slate-900 px-4 py-3 ring-1 ring-slate-700" value="••••••••" readonly />
+        <button class="w-full rounded-lg bg-blue-600 py-3 font-semibold">Sign in</button>
+      </div>
+    </div>
+  </div>
+  <p class="caption -mt-12 mb-16">/login</p>
+
+  <!-- ─── WEB ENTRIES ─── -->
+  <div class="browser mb-4">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/entries</div>
+    </div>
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-6">
+          <span class="text-lg font-bold">Clock-in admin</span>
+          <nav class="flex gap-4 text-sm">
+            <a class="text-white">Time entries</a>
+            <a class="text-slate-400">Employees</a>
+          </nav>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="text-slate-400">admin@example.com</span>
+          <button class="rounded-lg bg-slate-800 px-3 py-1.5">Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="px-6 py-8 space-y-6">
+      <div class="flex flex-wrap items-end gap-4">
+        <div>
+          <label class="block text-xs uppercase text-slate-400">From</label>
+          <input class="mt-1 rounded-lg bg-slate-800 px-3 py-2" value="2026-04-30" readonly />
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-slate-400">To</label>
+          <input class="mt-1 rounded-lg bg-slate-800 px-3 py-2" value="2026-05-07" readonly />
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-slate-400">Employee</label>
+          <select class="mt-1 rounded-lg bg-slate-800 px-3 py-2"><option>All</option></select>
+        </div>
+        <div class="ml-auto flex gap-2">
+          <button class="rounded-lg bg-emerald-600 px-4 py-2">Excel</button>
+          <button class="rounded-lg bg-rose-600 px-4 py-2">PDF</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-800">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-800/60 text-left text-xs uppercase text-slate-400">
+            <tr>
+              <th class="px-4 py-3">Employee</th>
+              <th class="px-4 py-3">Clock in</th>
+              <th class="px-4 py-3">Clock out</th>
+              <th class="px-4 py-3">Hours</th>
+              <th class="px-4 py-3">Notes</th>
+              <th class="px-4 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3">Sample Employee</td>
+              <td class="px-4 py-3">May 7, 9:14 AM</td>
+              <td class="px-4 py-3">May 7, 5:00 PM</td>
+              <td class="px-4 py-3">7.77</td>
+              <td class="px-4 py-3 text-slate-300"></td>
+              <td class="px-4 py-3 text-right">
+                <button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button>
+                <button class="rounded bg-rose-700 px-3 py-1">Delete</button>
+              </td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3">Sample Employee</td>
+              <td class="px-4 py-3">May 6, 9:02 AM</td>
+              <td class="px-4 py-3">May 6, 4:55 PM</td>
+              <td class="px-4 py-3">7.88</td>
+              <td class="px-4 py-3 text-slate-300">left early — sick</td>
+              <td class="px-4 py-3 text-right">
+                <button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button>
+                <button class="rounded bg-rose-700 px-3 py-1">Delete</button>
+              </td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3">Admin User</td>
+              <td class="px-4 py-3">May 6, 8:30 AM</td>
+              <td class="px-4 py-3">—</td>
+              <td class="px-4 py-3">—</td>
+              <td class="px-4 py-3 text-slate-300"></td>
+              <td class="px-4 py-3 text-right">
+                <button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button>
+                <button class="rounded bg-rose-700 px-3 py-1">Delete</button>
+              </td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3">Sample Employee</td>
+              <td class="px-4 py-3">May 5, 9:10 AM</td>
+              <td class="px-4 py-3">May 5, 5:11 PM</td>
+              <td class="px-4 py-3">8.02</td>
+              <td class="px-4 py-3 text-slate-300"></td>
+              <td class="px-4 py-3 text-right">
+                <button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button>
+                <button class="rounded bg-rose-700 px-3 py-1">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="caption mb-16">/entries — date and employee filters, edit/delete, Excel + PDF export</p>
+
+  <!-- ─── WEB ENTRIES — EDIT MODAL ─── -->
+  <div class="browser mb-4 relative">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/entries (edit modal)</div>
+    </div>
+    <div class="bg-slate-900/40 px-6 py-20 flex justify-center" style="background-image: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6));">
+      <div class="w-full max-w-md bg-slate-800 p-6 rounded-2xl shadow-2xl">
+        <h2 class="text-xl font-semibold">Edit entry</h2>
+        <div class="mt-4 space-y-3">
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Clock in</span>
+            <input class="mt-1 w-full rounded bg-slate-900 px-3 py-2" value="2026-05-07T09:14" readonly />
+          </label>
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Clock out</span>
+            <input class="mt-1 w-full rounded bg-slate-900 px-3 py-2" value="2026-05-07T17:00" readonly />
+          </label>
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Notes</span>
+            <textarea class="mt-1 w-full rounded bg-slate-900 px-3 py-2" rows="3" readonly>Worked the late shift covering for Jane.</textarea>
+          </label>
+        </div>
+        <div class="mt-6 flex justify-end gap-2">
+          <button class="rounded bg-slate-700 px-4 py-2">Cancel</button>
+          <button class="rounded bg-blue-600 px-4 py-2">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="caption mb-16">/entries — Edit modal</p>
+
+  <!-- ─── WEB EMPLOYEES ─── -->
+  <div class="browser mb-4">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/employees</div>
+    </div>
+
+    <header class="border-b border-slate-800 bg-slate-900/80">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-6">
+          <span class="text-lg font-bold">Clock-in admin</span>
+          <nav class="flex gap-4 text-sm">
+            <a class="text-slate-400">Time entries</a>
+            <a class="text-white">Employees</a>
+          </nav>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="text-slate-400">admin@example.com</span>
+          <button class="rounded-lg bg-slate-800 px-3 py-1.5">Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="px-6 py-8 space-y-6">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold">Employees</h1>
+        <button class="rounded-lg bg-blue-600 px-4 py-2">Invite employee</button>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-slate-800">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-800/60 text-left text-xs uppercase text-slate-400">
+            <tr>
+              <th class="px-4 py-3">Name</th>
+              <th class="px-4 py-3">Role</th>
+              <th class="px-4 py-3">Shift / Break (min)</th>
+              <th class="px-4 py-3">Status</th>
+              <th class="px-4 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3">Admin User</td>
+              <td class="px-4 py-3 capitalize">admin</td>
+              <td class="px-4 py-3">450 / 30</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-300 text-xs">Active</span></td>
+              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3">Sample Employee</td>
+              <td class="px-4 py-3 capitalize">employee</td>
+              <td class="px-4 py-3">450 / 30</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-300 text-xs">Active</span></td>
+              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3">Jane Smith</td>
+              <td class="px-4 py-3 capitalize">employee</td>
+              <td class="px-4 py-3">480 / 45</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-slate-500/20 px-2 py-0.5 text-slate-300 text-xs">Inactive</span></td>
+              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Reactivate</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="caption mb-16">/employees — invite, deactivate, reactivate</p>
+
+  <!-- ─── INVITE MODAL ─── -->
+  <div class="browser mb-4">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/employees (invite modal)</div>
+    </div>
+    <div class="px-6 py-20 flex justify-center" style="background-image: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6));">
+      <div class="w-full max-w-md bg-slate-800 p-6 rounded-2xl shadow-2xl space-y-3">
+        <h2 class="text-xl font-semibold">Invite employee</h2>
+        <input class="w-full rounded bg-slate-900 px-3 py-2" value="jane@example.com" readonly />
+        <input class="w-full rounded bg-slate-900 px-3 py-2" value="Jane Smith" readonly />
+        <select class="w-full rounded bg-slate-900 px-3 py-2"><option>Employee</option><option>Admin</option></select>
+        <input class="w-full rounded bg-slate-900 px-3 py-2" value="••••••••" readonly />
+        <p class="text-xs text-slate-400">Share these credentials with the employee. They can change the password from the mobile app's settings.</p>
+        <div class="flex justify-end gap-2 pt-2">
+          <button class="rounded bg-slate-700 px-4 py-2">Cancel</button>
+          <button class="rounded bg-blue-600 px-4 py-2">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="caption mb-16">/employees — Invite modal</p>
+</section>
+
+<footer class="text-center text-slate-500 text-sm py-12">
+  Mockups only — actual screens are built from the same Tailwind classes in <code>mobile/src/screens/</code> and <code>web-admin/src/app/</code>.
+</footer>
+
+</body>
+</html>

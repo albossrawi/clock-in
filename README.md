@@ -67,6 +67,10 @@ After running `supabase/seed.sql`:
 
 Change these immediately in production.
 
+## UI mockups
+
+Open `docs/mockups/index.html` in a browser for a visual reference of every screen (uses the same Tailwind classes as the real apps, runs offline).
+
 ## Branch
 
 All development happens on `claude/employee-clock-app-r5Eqg`.
