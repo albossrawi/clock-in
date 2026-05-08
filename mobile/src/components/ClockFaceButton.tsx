@@ -47,7 +47,6 @@ export default function ClockFaceButton({
   const HOUR_HAND = OUTER * 0.55;
   const MIN_HAND = OUTER * 0.78;
   const SEC_HAND = OUTER * 0.85;
-  const HUB_R = Math.max(4, size * 0.022);
 
   const h = now.getHours() % 12;
   const m = now.getMinutes();
@@ -69,7 +68,10 @@ export default function ClockFaceButton({
   const secTip = polar(secDeg, SEC_HAND);
 
   const numberFontSize = Math.round(size * 0.07);
-  const iconSize = Math.round(size * 0.18);
+  const iconSize = Math.round(size * 0.13);
+  const complicationPadH = size * 0.04;
+  const complicationPadV = size * 0.012;
+  const complicationH = iconSize + complicationPadV * 2;
 
   return (
     <View style={{ alignItems: 'center' }}>
@@ -155,19 +157,18 @@ export default function ClockFaceButton({
               strokeWidth={1.4}
               strokeLinecap="round"
             />
-            {/* Center hub */}
-            <Circle cx={C} cy={C} r={HUB_R} fill={accent} />
           </Svg>
 
-          {/* Icon complication in the lower half */}
+          {/* Icon complication centered on the dial — covers the hub
+              so the hands sweep around it like a watch logo. */}
           <View
             pointerEvents="none"
             style={[
               styles.complication,
               {
-                top: C + size * 0.16,
-                paddingHorizontal: size * 0.05,
-                paddingVertical: size * 0.018,
+                top: C - complicationH / 2,
+                paddingHorizontal: complicationPadH,
+                paddingVertical: complicationPadV,
                 borderRadius: size,
                 borderColor: accent,
                 backgroundColor: '#0f172a',

@@ -806,22 +806,19 @@
     svg.appendChild(minHand);
     svg.appendChild(secHand);
 
-    svg.appendChild(el('circle', {
-      cx: C, cy: C, r: Math.max(4, w * 0.022), fill: accent,
-    }));
-
-    // Icon complication
-    const iconBoxR = w * 0.14;
-    const iconY = C + w * 0.20;
+    // Centered icon complication — covers the hub so hands sweep around it.
+    const iconBoxRX = w * 0.13;
+    const iconBoxRY = w * 0.10;
     svg.appendChild(el('rect', {
-      x: C - iconBoxR, y: iconY - iconBoxR * 0.85,
-      width: iconBoxR * 2, height: iconBoxR * 1.7,
-      rx: iconBoxR, ry: iconBoxR,
+      x: C - iconBoxRX, y: C - iconBoxRY,
+      width: iconBoxRX * 2, height: iconBoxRY * 2,
+      rx: iconBoxRY, ry: iconBoxRY,
       fill: '#0f172a', stroke: accent, 'stroke-width': 1.5,
     }));
-    const iconScale = (iconBoxR * 1.3) / 24;
+    const iconPx = w * 0.13;
+    const iconScale = iconPx / 24;
     const iconG = el('g', {
-      transform: `translate(${C - iconBoxR * 0.65}, ${iconY - iconBoxR * 0.65}) scale(${iconScale})`,
+      transform: `translate(${C - iconPx / 2}, ${C - iconPx / 2}) scale(${iconScale})`,
     });
     const iconPath = el('path', { d: ICON_PATHS[iconName] || ICON_PATHS.login, fill: accent });
     iconG.appendChild(iconPath);
