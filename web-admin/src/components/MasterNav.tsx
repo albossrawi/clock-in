@@ -5,12 +5,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase-browser';
 
 const links = [
-  { href: '/entries', label: 'Time entries' },
-  { href: '/employees', label: 'Employees' },
-  { href: '/settings', label: 'Settings' },
+  { href: '/master/companies', label: 'Companies' },
+  { href: '/entries', label: 'All entries' },
 ];
 
-export default function NavBar({ email }: { email: string | null }) {
+export default function MasterNav({ email }: { email: string | null }) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -22,13 +21,15 @@ export default function NavBar({ email }: { email: string | null }) {
   };
 
   return (
-    <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur">
+    <header className="border-b border-amber-500/30 bg-slate-900/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <div className="flex items-center gap-6">
-          <span className="text-lg font-bold">Clock-in admin</span>
+          <span className="text-lg font-bold">
+            Clock-in <span className="ml-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-xs uppercase tracking-wider text-amber-300">Master</span>
+          </span>
           <nav className="flex gap-4 text-sm">
             {links.map((l) => {
-              const active = pathname === l.href;
+              const active = pathname.startsWith(l.href);
               return (
                 <Link
                   key={l.href}

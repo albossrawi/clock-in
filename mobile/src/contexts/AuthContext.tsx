@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-import { Profile } from '@/types';
+import { CompanySettings, Profile } from '@/types';
 
 interface AuthState {
   session: Session | null;
   profile: Profile | null;
+  companySettings: CompanySettings | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthState | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [companySettings, setCompanySettings] = useState<CompanySettings | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,18 +33,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  const loadProfile = async (userId: string) => {
-    const { data } = await supabase.from('profiles').select('*').eq('id', userId).single();
-    setProfile((data as Profile) ?? null);
+  const loadProfileAndCompany = async (userId: string) => {
+    const { data: prof } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    setProfile((prof as Profile) ?? null);
+
+    if (prof?.company_id) {
+      const { data: company } = await supabase
+        .from('companies')
+        .select('warn_early_clock_in, warn_late_clock_in, early_threshold_minutes, late_threshold_minutes')
+        .eq('id', prof.company_id)
+        .single();
+      setCompanySettings((company as CompanySettings) ?? null);
+    } else {
+      setCompanySettings(null);
+    }
   };
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       if (session?.user) {
-        await loadProfile(session.user.id);
+        await loadProfileAndCompany(session.user.id);
       } else {
         setProfile(null);
+        setCompanySettings(null);
       }
       if (!cancelled) setLoading(false);
     })();
@@ -55,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       session,
       profile,
+      companySettings,
       loading,
       async signIn(email, password) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -68,10 +87,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error: error?.message ?? null };
       },
       async refreshProfile() {
-        if (session?.user) await loadProfile(session.user.id);
+        if (session?.user) await loadProfileAndCompany(session.user.id);
       },
     }),
-    [session, profile, loading],
+    [session, profile, companySettings, loading],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -2,15 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   Alert,
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import * as Notifications from 'expo-notifications';
-import { format, formatDistanceToNowStrict } from 'date-fns';
+import { format } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import {
@@ -19,17 +17,11 @@ import {
   cancelNotification,
 } from '@/lib/notifications';
 import { Break, TimeEntry } from '@/types';
-
-const CLOCK_OUT_NOTIF_KEY = 'clock-out-notif-id';
-const BREAK_END_NOTIF_KEY = 'break-end-notif-id';
-
-// Scheduled notification IDs are kept in module-scope refs so they survive
-// re-renders. They're also durable across app cold-starts because we cancel
-// by *content* on clock-out (Notifications.cancelAllScheduledNotificationsAsync
-// is too aggressive for production, but acceptable for a single-purpose app).
+import CircleButton from '@/components/CircleButton';
+import { ensureLocationPermission, getCurrentLocation } from '@/lib/location';
 
 export default function HomeScreen() {
-  const { profile, session } = useAuth();
+  const { profile, session, companySettings } = useAuth();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -75,12 +67,15 @@ export default function HomeScreen() {
   useEffect(() => {
     (async () => {
       await ensureNotificationPermissions();
+      // Request location permission up-front; the user can still clock in
+      // if they decline (the location columns just stay null).
+      await ensureLocationPermission();
       await fetchState();
       setLoading(false);
     })();
   }, [fetchState]);
 
-  // Tick once a second so countdowns + elapsed labels update.
+  // Tick once a second so the live timer + countdown update.
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
@@ -103,14 +98,81 @@ export default function HomeScreen() {
     setRefreshing(false);
   };
 
-  const clockIn = async () => {
+  // Compare current time to the employee's scheduled start. Returns null if
+  // they have no schedule, today isn't a scheduled day, or they're inside the
+  // company's grace window (early_threshold / late_threshold minutes).
+  const scheduleStatus = (): { kind: 'early' | 'late'; minutes: number } | null => {
+    const start = profile?.scheduled_start;
+    const days = profile?.scheduled_days;
+    if (!start || !days || days.length === 0) return null;
+
+    const nowDate = new Date();
+    // JS getDay: 0=Sun..6=Sat ; we use ISO 1=Mon..7=Sun.
+    const isoDow = ((nowDate.getDay() + 6) % 7) + 1;
+    if (!days.includes(isoDow)) return null;
+
+    const [hh, mm] = start.split(':').map(Number);
+    const scheduled = new Date(nowDate);
+    scheduled.setHours(hh ?? 0, mm ?? 0, 0, 0);
+
+    const diffMin = (nowDate.getTime() - scheduled.getTime()) / 60000;
+    const earlyThr = companySettings?.early_threshold_minutes ?? 5;
+    const lateThr = companySettings?.late_threshold_minutes ?? 5;
+
+    if (diffMin < -earlyThr) return { kind: 'early', minutes: Math.round(-diffMin) };
+    if (diffMin > lateThr) return { kind: 'late', minutes: Math.round(diffMin) };
+    return null;
+  };
+
+  const clockIn = () => {
+    if (!session?.user || busy) return;
+    const status = scheduleStatus();
+
+    if (status?.kind === 'early' && companySettings?.warn_early_clock_in !== false) {
+      Alert.alert(
+        'Starting early',
+        `You're starting ${status.minutes} minute${status.minutes === 1 ? '' : 's'} before your scheduled time. Clock in now?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Clock in', onPress: () => void doClockIn() },
+        ],
+      );
+      return;
+    }
+
+    if (status?.kind === 'late' && companySettings?.warn_late_clock_in !== false) {
+      Alert.alert(
+        'Starting late',
+        `You're ${status.minutes} minute${status.minutes === 1 ? '' : 's'} past your scheduled start time.`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Clock in', onPress: () => void doClockIn() },
+        ],
+      );
+      return;
+    }
+
+    void doClockIn();
+  };
+
+  const doClockIn = async () => {
     if (!session?.user || busy) return;
     setBusy(true);
     try {
+      // Best-effort location capture. Null if the user denied permission
+      // or the GPS lookup failed (e.g. indoors with no fix).
+      const loc = await getCurrentLocation();
+
       const nowDate = new Date();
       const { data, error } = await supabase
         .from('time_entries')
-        .insert({ user_id: session.user.id, clock_in_at: nowDate.toISOString() })
+        .insert({
+          user_id: session.user.id,
+          clock_in_at: nowDate.toISOString(),
+          clock_in_lat: loc?.lat ?? null,
+          clock_in_lng: loc?.lng ?? null,
+          clock_in_accuracy_m: loc?.accuracy_m ? Math.round(loc.accuracy_m) : null,
+        })
         .select('*')
         .single();
       if (error) throw error;
@@ -130,16 +192,34 @@ export default function HomeScreen() {
     }
   };
 
-  const clockOut = async () => {
+  const confirmClockOut = () => {
+    if (!entry || busy) return;
+    Alert.alert(
+      'Clock out?',
+      "This ends your shift. You can't undo this.",
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Clock out', style: 'destructive', onPress: () => void doClockOut() },
+      ],
+    );
+  };
+
+  const doClockOut = async () => {
     if (!entry || busy) return;
     setBusy(true);
     try {
-      // Close any open break first.
       if (activeBreak) await endBreak(false);
+
+      const loc = await getCurrentLocation();
 
       const { error } = await supabase
         .from('time_entries')
-        .update({ clock_out_at: new Date().toISOString() })
+        .update({
+          clock_out_at: new Date().toISOString(),
+          clock_out_lat: loc?.lat ?? null,
+          clock_out_lng: loc?.lng ?? null,
+          clock_out_accuracy_m: loc?.accuracy_m ? Math.round(loc.accuracy_m) : null,
+        })
         .eq('id', entry.id);
       if (error) throw error;
 
@@ -213,77 +293,83 @@ export default function HomeScreen() {
   const breakRemaining = activeBreak
     ? Math.max(0, new Date(activeBreak.start_at).getTime() + breakLengthMs - now)
     : 0;
-  const elapsedSinceClockIn = entry
-    ? formatDistanceToNowStrict(new Date(entry.clock_in_at))
-    : null;
+  const liveElapsed = entry ? formatHms(now - new Date(entry.clock_in_at).getTime()) : null;
 
   return (
     <ScrollView
       contentContainerStyle={styles.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#f8fafc" />}
     >
-      <View style={styles.header}>
+      <View style={styles.greetingBlock}>
         <Text style={styles.greeting}>Hi {profile?.full_name ?? 'there'}</Text>
-        <Text style={styles.status}>
-          {isClockedIn ? `Clocked in • ${elapsedSinceClockIn}` : 'Not clocked in'}
-        </Text>
-        {entry && (
-          <Text style={styles.muted}>
-            since {format(new Date(entry.clock_in_at), 'p')}
-          </Text>
-        )}
       </View>
 
-      <View style={styles.buttonStack}>
-        {!isClockedIn && (
-          <BigButton label="Clock In" color="#16a34a" onPress={clockIn} disabled={busy} />
-        )}
+      {isClockedIn && (
+        <View style={styles.timerCard}>
+          <Text style={styles.timerLabel}>Working time</Text>
+          <Text style={styles.timer}>{liveElapsed}</Text>
+          <Text style={styles.timerSub}>since {format(new Date(entry!.clock_in_at), 'p')}</Text>
+        </View>
+      )}
 
-        {isClockedIn && !onBreak && (
-          <>
-            <BigButton label="Start Break" color="#f59e0b" onPress={startBreak} disabled={busy} />
-            <BigButton label="Clock Out" color="#dc2626" onPress={clockOut} disabled={busy} />
-          </>
-        )}
+      {!isClockedIn && (
+        <View style={styles.idleBlock}>
+          <Text style={styles.idleStatus}>Not clocked in</Text>
+        </View>
+      )}
 
-        {isClockedIn && onBreak && (
-          <View style={styles.breakCard}>
-            <Text style={styles.breakLabel}>On break</Text>
-            <Text style={styles.breakTimer}>{formatMs(breakRemaining)}</Text>
-            <Text style={styles.muted}>remaining</Text>
-            <TouchableOpacity
-              style={[styles.smallButton, busy && styles.disabled]}
+      {!isClockedIn && (
+        <View style={styles.singleButton}>
+          <CircleButton
+            onPress={clockIn}
+            disabled={busy}
+            color="#16a34a"
+            icon="login"
+            label="Clock In"
+            size={200}
+          />
+        </View>
+      )}
+
+      {isClockedIn && !onBreak && (
+        <View style={styles.actionRow}>
+          <CircleButton
+            onPress={startBreak}
+            disabled={busy}
+            color="#f59e0b"
+            icon="coffee-outline"
+            label="Start Break"
+            size={120}
+          />
+          <CircleButton
+            onPress={confirmClockOut}
+            disabled={busy}
+            color="#dc2626"
+            icon="logout"
+            label="Clock Out"
+            size={120}
+          />
+        </View>
+      )}
+
+      {isClockedIn && onBreak && (
+        <View style={styles.breakCard}>
+          <Text style={styles.breakLabel}>On break</Text>
+          <Text style={styles.breakTimer}>{formatMs(breakRemaining)}</Text>
+          <Text style={styles.timerSub}>remaining</Text>
+          <View style={{ marginTop: 18 }}>
+            <CircleButton
               onPress={() => endBreak(false)}
               disabled={busy}
-            >
-              <Text style={styles.smallButtonText}>End break now</Text>
-            </TouchableOpacity>
+              color="#334155"
+              icon="play"
+              label="End break now"
+              size={88}
+            />
           </View>
-        )}
-      </View>
+        </View>
+      )}
     </ScrollView>
-  );
-}
-
-function BigButton({
-  label,
-  color,
-  onPress,
-  disabled,
-}: {
-  label: string;
-  color: string;
-  onPress: () => void;
-  disabled?: boolean;
-}) {
-  return (
-    <TouchableOpacity
-      style={[styles.bigButton, { backgroundColor: color }, disabled && styles.disabled]}
-      onPress={onPress}
-      disabled={disabled}
-    >
-      <Text style={styles.bigButtonText}>{label}</Text>
-    </TouchableOpacity>
   );
 }
 
@@ -294,35 +380,69 @@ function formatMs(ms: number): string {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+function formatHms(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s
+    .toString()
+    .padStart(2, '0')}`;
+}
+
 const styles = StyleSheet.create({
   container: { flexGrow: 1, backgroundColor: '#0f172a', padding: 24, justifyContent: 'center' },
   center: { alignItems: 'center', justifyContent: 'center' },
-  header: { alignItems: 'center', marginBottom: 48 },
+  greetingBlock: { alignItems: 'center', marginBottom: 24 },
   greeting: { fontSize: 22, color: '#f8fafc', fontWeight: '600' },
-  status: { fontSize: 16, color: '#cbd5e1', marginTop: 8 },
-  muted: { fontSize: 14, color: '#94a3b8', marginTop: 4 },
-  buttonStack: { gap: 16 },
-  bigButton: {
+
+  idleBlock: { alignItems: 'center', marginBottom: 36 },
+  idleStatus: { color: '#94a3b8', fontSize: 16 },
+
+  timerCard: {
+    backgroundColor: '#1e293b',
+    borderRadius: 28,
     paddingVertical: 28,
-    borderRadius: 20,
+    paddingHorizontal: 24,
     alignItems: 'center',
+    marginBottom: 32,
   },
-  bigButtonText: { color: '#fff', fontSize: 22, fontWeight: '700' },
+  timerLabel: {
+    color: '#94a3b8',
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+  },
+  timer: {
+    color: '#f8fafc',
+    fontSize: 56,
+    fontWeight: '800',
+    fontVariant: ['tabular-nums'],
+    marginVertical: 6,
+    letterSpacing: 1,
+  },
+  timerSub: { color: '#94a3b8', fontSize: 13 },
+
+  singleButton: { alignItems: 'center', marginTop: 8 },
+  actionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+    gap: 24,
+  },
+
   breakCard: {
     backgroundColor: '#1e293b',
-    borderRadius: 20,
+    borderRadius: 28,
     padding: 32,
     alignItems: 'center',
   },
-  breakLabel: { color: '#94a3b8', fontSize: 14, textTransform: 'uppercase', letterSpacing: 1 },
-  breakTimer: { color: '#f8fafc', fontSize: 56, fontWeight: '700', marginVertical: 8, fontVariant: ['tabular-nums'] },
-  smallButton: {
-    backgroundColor: '#334155',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 10,
-    marginTop: 16,
+  breakLabel: { color: '#94a3b8', fontSize: 12, textTransform: 'uppercase', letterSpacing: 2 },
+  breakTimer: {
+    color: '#f8fafc',
+    fontSize: 56,
+    fontWeight: '800',
+    marginVertical: 6,
+    fontVariant: ['tabular-nums'],
   },
-  smallButtonText: { color: '#f8fafc', fontWeight: '600' },
-  disabled: { opacity: 0.5 },
 });

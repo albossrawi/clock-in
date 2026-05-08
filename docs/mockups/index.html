@@ -63,6 +63,8 @@
 <section class="max-w-6xl mx-auto px-6 py-10">
   <h2 class="text-2xl font-semibold mb-8">Mobile (Expo)</h2>
 
+  <p class="text-slate-400 text-sm mb-6">Hover the buttons to see the lift; click to see the press animation.</p>
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 justify-items-center">
 
     <!-- ─── LOGIN ─── -->
@@ -74,7 +76,7 @@
           <p class="text-slate-400 text-center mt-1 mb-8 text-sm">Sign in to start your shift</p>
           <input class="bg-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm mb-3" value="employee@example.com" readonly />
           <input class="bg-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm mb-4" value="••••••••••" readonly />
-          <button class="bg-blue-600 py-4 rounded-xl font-semibold">Sign in</button>
+          <button class="bg-blue-600 py-4 rounded-full font-semibold transition transform hover:-translate-y-0.5 active:scale-95">Sign in</button>
         </div>
       </div>
       <p class="caption">Login</p>
@@ -85,11 +87,15 @@
       <div class="phone">
         <div class="notch"></div>
         <div class="screen justify-center">
-          <div class="text-center mb-12">
-            <p class="text-xl font-semibold">Hi Sample Employee</p>
-            <p class="text-slate-300 text-sm mt-2">Not clocked in</p>
+          <p class="text-xl font-semibold text-center mb-3">Hi Sample Employee</p>
+          <p class="text-slate-300 text-sm text-center mb-8">Not clocked in</p>
+
+          <div class="flex flex-col items-center">
+            <button class="rounded-full bg-green-600 transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 flex items-center justify-center" style="width: 170px; height: 170px;">
+              <svg width="74" height="74" viewBox="0 0 24 24" fill="white"><path d="M10,17V14H3V10H10V7L15,12L10,17M10,2H19A2,2 0 0,1 21,4V20A2,2 0 0,1 19,22H10A2,2 0 0,1 8,20V18H10V20H19V4H10V6H8V4A2,2 0 0,1 10,2Z"/></svg>
+            </button>
+            <p class="text-slate-100 text-base font-semibold mt-3">Clock In</p>
           </div>
-          <button class="bg-green-600 py-7 rounded-2xl text-xl font-bold">Clock In</button>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
       </div>
@@ -101,13 +107,27 @@
       <div class="phone">
         <div class="notch"></div>
         <div class="screen justify-center">
-          <div class="text-center mb-10">
-            <p class="text-xl font-semibold">Hi Sample Employee</p>
-            <p class="text-slate-300 text-sm mt-2">Clocked in • 2 hours</p>
-            <p class="text-slate-400 text-xs mt-1">since 9:14 AM</p>
+          <p class="text-base font-semibold text-center mb-3">Hi Sample Employee</p>
+          <div class="bg-slate-800 rounded-3xl py-4 px-4 text-center mb-7">
+            <p class="text-slate-400 text-[10px] uppercase tracking-[0.2em]">Working time</p>
+            <p class="text-3xl font-extrabold my-0.5 tabular-nums tracking-wide">02:14:37</p>
+            <p class="text-slate-400 text-[10px]">since 7:14 PM</p>
           </div>
-          <button class="bg-amber-500 py-6 rounded-2xl text-lg font-bold mb-3">Start Break</button>
-          <button class="bg-red-600 py-6 rounded-2xl text-lg font-bold">Clock Out</button>
+
+          <div class="flex items-start justify-around gap-3">
+            <div class="flex flex-col items-center">
+              <button class="rounded-full bg-amber-500 transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 flex items-center justify-center" style="width: 100px; height: 100px;">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+              </button>
+              <p class="text-slate-100 text-xs font-semibold mt-2">Start Break</p>
+            </div>
+            <div class="flex flex-col items-center">
+              <button class="rounded-full bg-red-600 transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 flex items-center justify-center" style="width: 100px; height: 100px;">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="white"><path d="M17,17.25V14H10V10H17V6.75L22.25,12L17,17.25M13,2A2,2 0 0,1 15,4V8H13V4H4V20H13V16H15V20A2,2 0 0,1 13,22H4A2,2 0 0,1 2,20V4A2,2 0 0,1 4,2H13Z"/></svg>
+              </button>
+              <p class="text-slate-100 text-xs font-semibold mt-2">Clock Out</p>
+            </div>
+          </div>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
       </div>
@@ -119,15 +139,17 @@
       <div class="phone">
         <div class="notch"></div>
         <div class="screen justify-center">
-          <div class="text-center mb-8">
-            <p class="text-xl font-semibold">Hi Sample Employee</p>
-            <p class="text-slate-300 text-sm mt-2">Clocked in • 4 hours</p>
-          </div>
-          <div class="bg-slate-800 rounded-2xl p-8 text-center">
-            <p class="text-slate-400 text-xs uppercase tracking-widest">On break</p>
-            <p class="text-6xl font-bold my-2 tabular-nums">17:42</p>
-            <p class="text-slate-400 text-sm">remaining</p>
-            <button class="bg-slate-700 px-6 py-3 rounded-lg text-sm font-semibold mt-4">End break now</button>
+          <p class="text-xl font-semibold text-center mb-6">Hi Sample Employee</p>
+          <div class="bg-slate-800 rounded-3xl p-7 text-center">
+            <p class="text-slate-400 text-xs uppercase tracking-[0.2em]">On break</p>
+            <p class="text-6xl font-extrabold my-2 tabular-nums">17:42</p>
+            <p class="text-slate-400 text-xs">remaining</p>
+            <div class="flex flex-col items-center mt-4">
+              <button class="rounded-full bg-slate-700 transition transform active:scale-95 hover:bg-slate-600 flex items-center justify-center" style="width: 72px; height: 72px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21"/></svg>
+              </button>
+              <p class="text-slate-100 text-xs font-semibold mt-2">End break now</p>
+            </div>
           </div>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
@@ -149,10 +171,10 @@
             <p class="text-base font-semibold mb-3">Change password</p>
             <input class="bg-slate-800 px-4 py-3 rounded-xl text-sm w-full mb-3" value="••••••••" readonly />
             <input class="bg-slate-800 px-4 py-3 rounded-xl text-sm w-full mb-3" value="••••••••" readonly />
-            <button class="bg-blue-600 py-4 rounded-xl font-semibold w-full">Update password</button>
+            <button class="bg-blue-600 py-4 rounded-full font-semibold w-full transition transform hover:-translate-y-0.5 active:scale-95">Update password</button>
           </div>
           <div class="mt-auto mb-2">
-            <button class="bg-red-600 py-4 rounded-xl font-semibold w-full">Log out</button>
+            <button class="bg-red-600 py-4 rounded-full font-semibold w-full transition transform hover:-translate-y-0.5 active:scale-95">Log out</button>
           </div>
         </div>
         <div class="tabbar"><a>Home</a><a class="active">Settings</a></div>
@@ -189,22 +211,158 @@
   </div>
 </section>
 
-<!-- Notification toast example -->
-<section class="max-w-md mx-auto px-6 mt-4 mb-12">
-  <div class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 flex gap-3 items-start">
-    <div class="text-2xl">🔔</div>
-    <div>
-      <p class="font-semibold">Clock-in</p>
-      <p class="font-medium mt-0.5">Break is over</p>
-      <p class="text-sm text-slate-300">Your 30-minute break has ended.</p>
+<!-- Confirmation alert + notification examples -->
+<section class="max-w-6xl mx-auto px-6 mt-4 mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+
+  <div class="w-full max-w-md">
+    <div class="phone" style="height: auto;">
+      <div class="notch"></div>
+      <div class="screen justify-center" style="background: rgba(0,0,0,.55); padding: 80px 24px;">
+        <div class="bg-slate-700/95 rounded-2xl text-center overflow-hidden" style="backdrop-filter: blur(20px);">
+          <div class="px-6 py-5">
+            <p class="font-semibold text-base">Clock out?</p>
+            <p class="text-sm text-slate-200 mt-1">This ends your shift. You can't undo this.</p>
+          </div>
+          <div class="border-t border-slate-500/40 grid grid-cols-2">
+            <button class="py-3 text-blue-300 font-medium border-r border-slate-500/40">Cancel</button>
+            <button class="py-3 text-red-400 font-semibold">Clock out</button>
+          </div>
+        </div>
+      </div>
     </div>
+    <p class="caption">Confirmation before clocking out</p>
   </div>
-  <p class="caption">System notification (also fires after the 7.5h shift reminder)</p>
+
+  <div class="w-full max-w-md">
+    <div class="phone" style="height: auto;">
+      <div class="notch"></div>
+      <div class="screen justify-center" style="background: rgba(0,0,0,.55); padding: 80px 24px;">
+        <div class="bg-slate-700/95 rounded-2xl text-center overflow-hidden" style="backdrop-filter: blur(20px);">
+          <div class="px-6 py-5">
+            <p class="font-semibold text-base">Starting early</p>
+            <p class="text-sm text-slate-200 mt-1">You're starting 18 minutes before your scheduled time. Clock in now?</p>
+          </div>
+          <div class="border-t border-slate-500/40 grid grid-cols-2">
+            <button class="py-3 text-blue-300 font-medium border-r border-slate-500/40">Cancel</button>
+            <button class="py-3 text-blue-300 font-semibold">Clock in</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="caption">Early-clock-in confirmation (also a "Starting late" variant)</p>
+  </div>
+
+  <div class="w-full max-w-md">
+    <div class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 flex gap-3 items-start">
+      <div class="text-2xl">🔔</div>
+      <div>
+        <p class="font-semibold">Clock-in</p>
+        <p class="font-medium mt-0.5">Break is over</p>
+        <p class="text-sm text-slate-300">Your 30-minute break has ended.</p>
+      </div>
+    </div>
+    <p class="caption">System notification (also fires for the 7.5h shift reminder)</p>
+  </div>
+
 </section>
 
 <!-- ────────────────────────────────  WEB ADMIN  ──────────────────────────────── -->
 <section class="max-w-6xl mx-auto px-6 py-10">
   <h2 class="text-2xl font-semibold mb-8">Web admin (Next.js)</h2>
+
+  <!-- ─── REGISTER ─── -->
+  <div class="browser mb-4">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/register</div>
+    </div>
+    <div class="bg-slate-900 px-6 py-12 flex justify-center">
+      <div class="w-full max-w-md bg-slate-800 p-8 rounded-2xl shadow-xl space-y-3">
+        <div>
+          <h1 class="text-3xl font-bold">Register your company</h1>
+          <p class="text-slate-400 text-sm mt-1">You'll be the company's first admin. Invite employees after signing in.</p>
+        </div>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Company name</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="Acme Corp" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Address</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="123 Main St, Springfield" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Contact person</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="Jane Smith" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Contact email</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="jane@acme.com" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Phone</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="+1 555-0100" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Password (8+ chars)</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="••••••••" readonly /></label>
+        <button class="w-full rounded-full bg-blue-600 py-3 font-semibold mt-2 transition transform hover:-translate-y-0.5 active:scale-95">Create company</button>
+        <p class="text-center text-sm text-slate-400">Already have an account? <a class="text-blue-400">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+  <p class="caption mb-16">/register — public, anyone can sign up a company</p>
+
+  <!-- ─── MASTER DASHBOARD ─── -->
+  <div class="browser mb-4">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/master/companies</div>
+    </div>
+    <header class="border-b border-amber-500/30 bg-slate-900/80">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-6">
+          <span class="text-lg font-bold">Clock-in <span class="ml-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-xs uppercase tracking-wider text-amber-300">Master</span></span>
+          <nav class="flex gap-4 text-sm">
+            <a class="text-white">Companies</a>
+            <a class="text-slate-400">All entries</a>
+          </nav>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="text-slate-400">master@example.com</span>
+          <button class="rounded-lg bg-slate-800 px-3 py-1.5">Log out</button>
+        </div>
+      </div>
+    </header>
+    <div class="px-6 py-8 space-y-6">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold">Companies</h1>
+        <span class="text-sm text-slate-400">3 total</span>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-slate-800">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-800/60 text-left text-xs uppercase text-slate-400">
+            <tr><th class="px-4 py-3">Company</th><th class="px-4 py-3">Contact</th><th class="px-4 py-3">Headcount</th><th class="px-4 py-3">Created</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Actions</th></tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3"><div class="font-semibold">Acme Corp</div><div class="text-xs text-slate-400">123 Main St, Springfield</div></td>
+              <td class="px-4 py-3"><div>Admin User</div><div class="text-xs text-slate-400">admin@example.com</div><div class="text-xs text-slate-400">+1 555-0100</div></td>
+              <td class="px-4 py-3"><div class="text-xs"><span class="text-slate-300">1</span><span class="text-slate-500"> admin</span></div><div class="text-xs"><span class="text-slate-300">12</span><span class="text-slate-500"> employees</span></div></td>
+              <td class="px-4 py-3 text-slate-300">May 1, 2026</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Active</span></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Suspend</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3"><div class="font-semibold">Northwind Bakery</div><div class="text-xs text-slate-400">42 Bread Ave</div></td>
+              <td class="px-4 py-3"><div>Jane Smith</div><div class="text-xs text-slate-400">jane@northwind.com</div></td>
+              <td class="px-4 py-3"><div class="text-xs"><span class="text-slate-300">2</span><span class="text-slate-500"> admins</span></div><div class="text-xs"><span class="text-slate-300">7</span><span class="text-slate-500"> employees</span></div></td>
+              <td class="px-4 py-3 text-slate-300">May 4, 2026</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Active</span></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Suspend</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3"><div class="font-semibold">Globex (pending)</div><div class="text-xs text-slate-400">—</div></td>
+              <td class="px-4 py-3"><div>Hank Hill</div><div class="text-xs text-slate-400">hank@globex.com</div></td>
+              <td class="px-4 py-3"><div class="text-xs"><span class="text-slate-300">1</span><span class="text-slate-500"> admin</span></div><div class="text-xs"><span class="text-slate-300">0</span><span class="text-slate-500"> employees</span></div></td>
+              <td class="px-4 py-3 text-slate-300">May 7, 2026</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-slate-500/20 px-2 py-0.5 text-xs text-slate-300">Suspended</span></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Reactivate</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="caption mb-16">/master/companies — super_admin only, manages every tenant</p>
 
   <!-- ─── WEB LOGIN ─── -->
   <div class="browser mb-16">
@@ -220,7 +378,7 @@
         </div>
         <input class="w-full rounded-lg bg-slate-900 px-4 py-3 ring-1 ring-slate-700" value="admin@example.com" readonly />
         <input class="w-full rounded-lg bg-slate-900 px-4 py-3 ring-1 ring-slate-700" value="••••••••" readonly />
-        <button class="w-full rounded-lg bg-blue-600 py-3 font-semibold">Sign in</button>
+        <button class="w-full rounded-full bg-blue-600 py-3 font-semibold transition transform hover:-translate-y-0.5 active:scale-95">Sign in</button>
       </div>
     </div>
   </div>
@@ -240,6 +398,7 @@
           <nav class="flex gap-4 text-sm">
             <a class="text-white">Time entries</a>
             <a class="text-slate-400">Employees</a>
+            <a class="text-slate-400">Settings</a>
           </nav>
         </div>
         <div class="flex items-center gap-3 text-sm">
@@ -269,6 +428,40 @@
         </div>
       </div>
 
+      <!-- Weekly summary cards -->
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/40 p-4">
+        <div class="mb-3">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Weekly hours</h2>
+          <p class="text-xs text-slate-500">Standard 37h · OT paid at 1.50×</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          <div class="rounded-lg bg-slate-800/60 p-3 text-sm">
+            <div class="flex items-center justify-between"><span class="font-semibold">Sample Employee</span><span class="text-xs text-slate-400">Wk of May 5</span></div>
+            <div class="mt-1 flex flex-wrap gap-x-4 text-xs text-slate-300">
+              <span>Total <strong class="text-slate-100">39.42 h</strong></span>
+              <span>Daily OT <strong class="text-amber-300">0.50 h</strong></span>
+              <span>Weekly OT <strong class="text-rose-300">2.42 h</strong></span>
+            </div>
+          </div>
+          <div class="rounded-lg bg-slate-800/60 p-3 text-sm">
+            <div class="flex items-center justify-between"><span class="font-semibold">Jane Smith</span><span class="text-xs text-slate-400">Wk of May 5</span></div>
+            <div class="mt-1 flex flex-wrap gap-x-4 text-xs text-slate-300">
+              <span>Total <strong class="text-slate-100">31.10 h</strong></span>
+              <span>Daily OT <strong class="text-amber-300">0.00 h</strong></span>
+              <span>Weekly OT <strong class="text-slate-100">0.00 h</strong></span>
+            </div>
+          </div>
+          <div class="rounded-lg bg-slate-800/60 p-3 text-sm">
+            <div class="flex items-center justify-between"><span class="font-semibold">Admin User</span><span class="text-xs text-slate-400">Wk of May 5</span></div>
+            <div class="mt-1 flex flex-wrap gap-x-4 text-xs text-slate-300">
+              <span>Total <strong class="text-slate-100">15.20 h</strong></span>
+              <span>Daily OT <strong class="text-amber-300">0.00 h</strong></span>
+              <span>Weekly OT <strong class="text-slate-100">0.00 h</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="overflow-x-auto rounded-2xl border border-slate-800">
         <table class="w-full text-sm">
           <thead class="bg-slate-800/60 text-left text-xs uppercase text-slate-400">
@@ -276,55 +469,58 @@
               <th class="px-4 py-3">Employee</th>
               <th class="px-4 py-3">Clock in</th>
               <th class="px-4 py-3">Clock out</th>
+              <th class="px-4 py-3">Shift</th>
+              <th class="px-4 py-3">Status</th>
               <th class="px-4 py-3">Hours</th>
-              <th class="px-4 py-3">Notes</th>
+              <th class="px-4 py-3">OT</th>
+              <th class="px-4 py-3">Loc</th>
               <th class="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Sample Employee</td>
-              <td class="px-4 py-3">May 7, 9:14 AM</td>
-              <td class="px-4 py-3">May 7, 5:00 PM</td>
-              <td class="px-4 py-3">7.77</td>
-              <td class="px-4 py-3 text-slate-300"></td>
-              <td class="px-4 py-3 text-right">
-                <button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button>
-                <button class="rounded bg-rose-700 px-3 py-1">Delete</button>
-              </td>
+              <td class="px-4 py-3">May 7, 6:14 PM</td>
+              <td class="px-4 py-3">May 7, 11:00 PM</td>
+              <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-amber-500/20 text-amber-300">Evening</span></td>
+              <td class="px-4 py-3"><span class="text-xs text-slate-500">—</span></td>
+              <td class="px-4 py-3">4.27</td>
+              <td class="px-4 py-3 text-slate-400">0.00</td>
+              <td class="px-4 py-3"><a class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">GPS</a></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
             </tr>
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Sample Employee</td>
-              <td class="px-4 py-3">May 6, 9:02 AM</td>
-              <td class="px-4 py-3">May 6, 4:55 PM</td>
-              <td class="px-4 py-3">7.88</td>
-              <td class="px-4 py-3 text-slate-300">left early — sick</td>
-              <td class="px-4 py-3 text-right">
-                <button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button>
-                <button class="rounded bg-rose-700 px-3 py-1">Delete</button>
-              </td>
-            </tr>
-            <tr class="border-t border-slate-800">
-              <td class="px-4 py-3">Admin User</td>
-              <td class="px-4 py-3">May 6, 8:30 AM</td>
-              <td class="px-4 py-3">—</td>
-              <td class="px-4 py-3">—</td>
-              <td class="px-4 py-3 text-slate-300"></td>
-              <td class="px-4 py-3 text-right">
-                <button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button>
-                <button class="rounded bg-rose-700 px-3 py-1">Delete</button>
-              </td>
+              <td class="px-4 py-3">May 6, 11:00 PM</td>
+              <td class="px-4 py-3">May 7, 7:30 AM</td>
+              <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-indigo-500/20 text-indigo-300">Night</span></td>
+              <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-rose-500/20 text-rose-300">Late 12m</span></td>
+              <td class="px-4 py-3">8.00</td>
+              <td class="px-4 py-3 text-amber-300 font-semibold">0.50</td>
+              <td class="px-4 py-3"><a class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">GPS</a></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
             </tr>
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Sample Employee</td>
-              <td class="px-4 py-3">May 5, 9:10 AM</td>
+              <td class="px-4 py-3">May 5, 8:42 AM</td>
               <td class="px-4 py-3">May 5, 5:11 PM</td>
-              <td class="px-4 py-3">8.02</td>
-              <td class="px-4 py-3 text-slate-300"></td>
-              <td class="px-4 py-3 text-right">
-                <button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button>
-                <button class="rounded bg-rose-700 px-3 py-1">Delete</button>
-              </td>
+              <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-slate-500/20 text-slate-300">Regular</span></td>
+              <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-sky-500/20 text-sky-300">Early 18m</span></td>
+              <td class="px-4 py-3">7.98</td>
+              <td class="px-4 py-3 text-amber-300 font-semibold">0.48</td>
+              <td class="px-4 py-3"><a class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">GPS</a></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3">Jane Smith</td>
+              <td class="px-4 py-3">May 4, 10:00 AM</td>
+              <td class="px-4 py-3">May 4, 6:00 PM</td>
+              <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-fuchsia-500/20 text-fuchsia-300">Weekend</span></td>
+              <td class="px-4 py-3"><span class="text-xs text-slate-500">—</span></td>
+              <td class="px-4 py-3">7.50</td>
+              <td class="px-4 py-3 text-slate-400">0.00</td>
+              <td class="px-4 py-3"><span class="text-xs text-slate-500">—</span></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -379,6 +575,7 @@
           <nav class="flex gap-4 text-sm">
             <a class="text-slate-400">Time entries</a>
             <a class="text-white">Employees</a>
+            <a class="text-slate-400">Settings</a>
           </nav>
         </div>
         <div class="flex items-center gap-3 text-sm">
@@ -399,6 +596,7 @@
             <tr>
               <th class="px-4 py-3">Name</th>
               <th class="px-4 py-3">Role</th>
+              <th class="px-4 py-3">Schedule</th>
               <th class="px-4 py-3">Shift / Break (min)</th>
               <th class="px-4 py-3">Status</th>
               <th class="px-4 py-3 text-right">Actions</th>
@@ -408,23 +606,26 @@
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Admin User</td>
               <td class="px-4 py-3 capitalize">admin</td>
+              <td class="px-4 py-3 text-slate-300"><div>09:00 – 17:00</div><div class="text-xs text-slate-500">Mon, Tue, Wed, Thu, Fri</div></td>
               <td class="px-4 py-3">450 / 30</td>
               <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-300 text-xs">Active</span></td>
-              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
+              <td class="px-4 py-3 text-right whitespace-nowrap"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
             </tr>
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Sample Employee</td>
               <td class="px-4 py-3 capitalize">employee</td>
+              <td class="px-4 py-3 text-slate-300"><div>09:00 – 17:30</div><div class="text-xs text-slate-500">Mon, Tue, Wed, Thu, Fri</div></td>
               <td class="px-4 py-3">450 / 30</td>
               <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-300 text-xs">Active</span></td>
-              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
+              <td class="px-4 py-3 text-right whitespace-nowrap"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
             </tr>
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Jane Smith</td>
               <td class="px-4 py-3 capitalize">employee</td>
+              <td class="px-4 py-3 text-slate-500">Not set</td>
               <td class="px-4 py-3">480 / 45</td>
               <td class="px-4 py-3"><span class="rounded-full bg-slate-500/20 px-2 py-0.5 text-slate-300 text-xs">Inactive</span></td>
-              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Reactivate</button></td>
+              <td class="px-4 py-3 text-right whitespace-nowrap"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-slate-700 px-3 py-1">Reactivate</button></td>
             </tr>
           </tbody>
         </table>
@@ -455,6 +656,142 @@
     </div>
   </div>
   <p class="caption mb-16">/employees — Invite modal</p>
+
+  <!-- ─── SETTINGS ─── -->
+  <div class="browser mb-4">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/settings</div>
+    </div>
+    <header class="border-b border-slate-800 bg-slate-900/80">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-6">
+          <span class="text-lg font-bold">Clock-in admin</span>
+          <nav class="flex gap-4 text-sm">
+            <a class="text-slate-400">Time entries</a>
+            <a class="text-slate-400">Employees</a>
+            <a class="text-white">Settings</a>
+          </nav>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="text-slate-400">admin@example.com</span>
+          <button class="rounded-lg bg-slate-800 px-3 py-1.5">Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="px-6 py-8 space-y-10">
+      <!-- Timezone -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+        <h2 class="text-xl font-semibold">Company timezone</h2>
+        <p class="mt-1 text-sm text-slate-400">Shift windows are evaluated in this timezone.</p>
+        <div class="mt-4 flex items-end gap-3">
+          <select class="rounded-lg bg-slate-800 px-3 py-2 ring-1 ring-slate-700"><option>America/New_York</option></select>
+          <button class="rounded-full bg-blue-600 px-5 py-2 font-semibold transition hover:-translate-y-0.5 active:scale-95">Save</button>
+        </div>
+      </section>
+
+      <!-- Hours and overtime -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+        <h2 class="text-xl font-semibold">Standard hours and overtime</h2>
+        <p class="mt-1 text-sm text-slate-400">Hours beyond these thresholds are flagged as overtime.</p>
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Daily standard (minutes)</span>
+            <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="450" readonly />
+            <span class="mt-1 block text-xs text-slate-500">7.50 h</span>
+          </label>
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Daily break (minutes)</span>
+            <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="30" readonly />
+            <span class="mt-1 block text-xs text-slate-500">30 min unpaid</span>
+          </label>
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Weekly standard (minutes)</span>
+            <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="2220" readonly />
+            <span class="mt-1 block text-xs text-slate-500">37.00 h / week</span>
+          </label>
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Overtime multiplier</span>
+            <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="1.50" readonly />
+            <span class="mt-1 block text-xs text-slate-500">OT paid at 1.50×</span>
+          </label>
+        </div>
+        <button class="mt-4 rounded-full bg-blue-600 px-5 py-2 font-semibold transition hover:-translate-y-0.5 active:scale-95">Save</button>
+      </section>
+
+      <!-- Early / late warnings -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+        <h2 class="text-xl font-semibold">Early / late clock-in warnings</h2>
+        <p class="mt-1 text-sm text-slate-400">The mobile app compares the clock-in time to the employee's scheduled start (set on the Employees page) and shows a confirmation if it's outside the grace window.</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center gap-3 text-sm"><input type="checkbox" class="h-4 w-4" checked /> Warn when an employee clocks in <strong>early</strong></label>
+          <label class="flex items-center gap-3 text-sm"><input type="checkbox" class="h-4 w-4" checked /> Warn when an employee clocks in <strong>late</strong></label>
+        </div>
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Early grace (minutes)</span>
+            <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="5" readonly />
+            <span class="mt-1 block text-xs text-slate-500">No warning if clocked in within 5 min before scheduled</span>
+          </label>
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Late grace (minutes)</span>
+            <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="5" readonly />
+            <span class="mt-1 block text-xs text-slate-500">No warning if clocked in within 5 min after scheduled</span>
+          </label>
+        </div>
+        <button class="mt-4 rounded-full bg-blue-600 px-5 py-2 font-semibold transition hover:-translate-y-0.5 active:scale-95">Save</button>
+      </section>
+
+      <!-- Shift types -->
+      <section>
+        <div class="mb-4 flex items-end justify-between">
+          <div>
+            <h2 class="text-xl font-semibold">Shift types</h2>
+            <p class="text-sm text-slate-400">Each clock-in is auto-tagged with the matching shift. Lower position wins.</p>
+          </div>
+          <button class="rounded-full bg-blue-600 px-5 py-2 font-semibold transition hover:-translate-y-0.5 active:scale-95">Add shift type</button>
+        </div>
+        <div class="overflow-x-auto rounded-2xl border border-slate-800">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-800/60 text-left text-xs uppercase text-slate-400">
+              <tr><th class="px-4 py-3">Name</th><th class="px-4 py-3">Window</th><th class="px-4 py-3">Days</th><th class="px-4 py-3">×</th><th class="px-4 py-3">Pos</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr class="border-t border-slate-800">
+                <td class="px-4 py-3 font-semibold">Weekend</td>
+                <td class="px-4 py-3 text-slate-300">00:00 – 23:59</td>
+                <td class="px-4 py-3 text-slate-300"><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Sat</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Sun</span></td>
+                <td class="px-4 py-3 text-slate-300">1.50</td>
+                <td class="px-4 py-3 text-slate-300">1</td>
+                <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Active</span></td>
+                <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Disable</button><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+              </tr>
+              <tr class="border-t border-slate-800">
+                <td class="px-4 py-3 font-semibold">Night</td>
+                <td class="px-4 py-3 text-slate-300">23:00 – 06:00</td>
+                <td class="px-4 py-3 text-slate-300"><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Mon</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Tue</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Wed</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Thu</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Fri</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Sat</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Sun</span></td>
+                <td class="px-4 py-3 text-slate-300">1.50</td>
+                <td class="px-4 py-3 text-slate-300">10</td>
+                <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Active</span></td>
+                <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Disable</button><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+              </tr>
+              <tr class="border-t border-slate-800">
+                <td class="px-4 py-3 font-semibold">Evening</td>
+                <td class="px-4 py-3 text-slate-300">18:00 – 23:00</td>
+                <td class="px-4 py-3 text-slate-300"><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Mon</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Tue</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Wed</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Thu</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Fri</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Sat</span><span class="mr-1 rounded bg-slate-700 px-1.5 py-0.5 text-xs">Sun</span></td>
+                <td class="px-4 py-3 text-slate-300">1.25</td>
+                <td class="px-4 py-3 text-slate-300">11</td>
+                <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Active</span></td>
+                <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Disable</button><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+  <p class="caption mb-16">/settings — timezone, daily/weekly hours + overtime, and shift types</p>
 </section>
 
 <footer class="text-center text-slate-500 text-sm py-12">

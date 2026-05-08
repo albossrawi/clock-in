@@ -1,14 +1,7 @@
 import { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
+import AnimatedButton from '@/components/AnimatedButton';
 
 export default function SettingsScreen() {
   const { profile, session, signOut, changePassword } = useAuth();
@@ -37,14 +30,19 @@ export default function SettingsScreen() {
     Alert.alert('Password updated');
   };
 
+  const roleLabel =
+    profile?.role === 'super_admin'
+      ? 'Master admin'
+      : profile?.role === 'admin'
+      ? 'Administrator'
+      : 'Employee';
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.label}>Signed in as</Text>
         <Text style={styles.value}>{session?.user.email ?? '—'}</Text>
-        <Text style={styles.muted}>
-          {profile?.role === 'admin' ? 'Administrator' : 'Employee'}
-        </Text>
+        <Text style={styles.muted}>{roleLabel}</Text>
       </View>
 
       <View style={styles.section}>
@@ -65,14 +63,16 @@ export default function SettingsScreen() {
           onChangeText={setConfirm}
           placeholderTextColor="#94a3b8"
         />
-        <TouchableOpacity style={styles.button} onPress={onChangePassword} disabled={submitting}>
-          {submitting ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Update password</Text>}
-        </TouchableOpacity>
+        {submitting ? (
+          <View style={styles.loading}><ActivityIndicator color="#fff" /></View>
+        ) : (
+          <AnimatedButton label="Update password" color="#2563eb" onPress={onChangePassword} />
+        )}
       </View>
 
-      <TouchableOpacity style={[styles.button, styles.danger]} onPress={signOut}>
-        <Text style={styles.buttonText}>Log out</Text>
-      </TouchableOpacity>
+      <View style={{ marginTop: 'auto' }}>
+        <AnimatedButton label="Log out" color="#dc2626" onPress={signOut} />
+      </View>
     </View>
   );
 }
@@ -93,7 +93,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
   },
-  button: { backgroundColor: '#2563eb', paddingVertical: 16, borderRadius: 12, alignItems: 'center' },
-  danger: { backgroundColor: '#dc2626' },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  loading: { paddingVertical: 28, alignItems: 'center' },
 });

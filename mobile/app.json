@@ -12,14 +12,16 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.example.clockin",
       "infoPlist": {
-        "UIBackgroundModes": []
+        "UIBackgroundModes": [],
+        "NSLocationWhenInUseUsageDescription": "Clock-in records the location where you clock in and clock out so your employer can verify on-site attendance."
       }
     },
     "android": {
       "package": "com.example.clockin",
       "adaptiveIcon": {
         "backgroundColor": "#0f172a"
-      }
+      },
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
     },
     "plugins": [
       [
@@ -28,7 +30,13 @@
           "color": "#0f172a"
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Clock-in records the location where you clock in and clock out so your employer can verify on-site attendance."
+        }
+      ]
     ],
     "extra": {
       "supabaseUrl": "",
