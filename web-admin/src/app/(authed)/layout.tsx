@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import NavBar from '@/components/NavBar';
+import MasterNav from '@/components/MasterNav';
 import { createClient } from '@/lib/supabase-server';
 
 export default async function AuthedLayout({ children }: { children: React.ReactNode }) {
@@ -10,8 +11,9 @@ export default async function AuthedLayout({ children }: { children: React.React
   if (!user) redirect('/login');
 
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+  const role = profile?.role;
 
-  if (profile?.role !== 'admin') {
+  if (role !== 'admin' && role !== 'super_admin') {
     return (
       <main className="flex min-h-screen items-center justify-center px-6 text-center">
         <div>
@@ -26,7 +28,11 @@ export default async function AuthedLayout({ children }: { children: React.React
 
   return (
     <>
-      <NavBar email={user.email ?? null} />
+      {role === 'super_admin' ? (
+        <MasterNav email={user.email ?? null} />
+      ) : (
+        <NavBar email={user.email ?? null} />
+      )}
       <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
     </>
   );

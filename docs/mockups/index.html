@@ -229,6 +229,100 @@
 <section class="max-w-6xl mx-auto px-6 py-10">
   <h2 class="text-2xl font-semibold mb-8">Web admin (Next.js)</h2>
 
+  <!-- ─── REGISTER ─── -->
+  <div class="browser mb-4">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/register</div>
+    </div>
+    <div class="bg-slate-900 px-6 py-12 flex justify-center">
+      <div class="w-full max-w-md bg-slate-800 p-8 rounded-2xl shadow-xl space-y-3">
+        <div>
+          <h1 class="text-3xl font-bold">Register your company</h1>
+          <p class="text-slate-400 text-sm mt-1">You'll be the company's first admin. Invite employees after signing in.</p>
+        </div>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Company name</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="Acme Corp" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Address</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="123 Main St, Springfield" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Contact person</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="Jane Smith" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Contact email</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="jane@acme.com" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Phone</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="+1 555-0100" readonly /></label>
+        <label class="block"><span class="text-xs uppercase text-slate-400">Password (8+ chars)</span>
+          <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="••••••••" readonly /></label>
+        <button class="w-full rounded-full bg-blue-600 py-3 font-semibold mt-2">Create company</button>
+        <p class="text-center text-sm text-slate-400">Already have an account? <a class="text-blue-400">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+  <p class="caption mb-16">/register — public, anyone can sign up a company</p>
+
+  <!-- ─── MASTER DASHBOARD ─── -->
+  <div class="browser mb-4">
+    <div class="chrome">
+      <span class="dot bg-red-500"></span><span class="dot bg-amber-500"></span><span class="dot bg-green-500"></span>
+      <div class="url">localhost:3000/master/companies</div>
+    </div>
+    <header class="border-b border-amber-500/30 bg-slate-900/80">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-6">
+          <span class="text-lg font-bold">Clock-in <span class="ml-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-xs uppercase tracking-wider text-amber-300">Master</span></span>
+          <nav class="flex gap-4 text-sm">
+            <a class="text-white">Companies</a>
+            <a class="text-slate-400">All entries</a>
+          </nav>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="text-slate-400">master@example.com</span>
+          <button class="rounded-lg bg-slate-800 px-3 py-1.5">Log out</button>
+        </div>
+      </div>
+    </header>
+    <div class="px-6 py-8 space-y-6">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold">Companies</h1>
+        <span class="text-sm text-slate-400">3 total</span>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-slate-800">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-800/60 text-left text-xs uppercase text-slate-400">
+            <tr><th class="px-4 py-3">Company</th><th class="px-4 py-3">Contact</th><th class="px-4 py-3">Headcount</th><th class="px-4 py-3">Created</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Actions</th></tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3"><div class="font-semibold">Acme Corp</div><div class="text-xs text-slate-400">123 Main St, Springfield</div></td>
+              <td class="px-4 py-3"><div>Admin User</div><div class="text-xs text-slate-400">admin@example.com</div><div class="text-xs text-slate-400">+1 555-0100</div></td>
+              <td class="px-4 py-3"><div class="text-xs"><span class="text-slate-300">1</span><span class="text-slate-500"> admin</span></div><div class="text-xs"><span class="text-slate-300">12</span><span class="text-slate-500"> employees</span></div></td>
+              <td class="px-4 py-3 text-slate-300">May 1, 2026</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Active</span></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Suspend</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3"><div class="font-semibold">Northwind Bakery</div><div class="text-xs text-slate-400">42 Bread Ave</div></td>
+              <td class="px-4 py-3"><div>Jane Smith</div><div class="text-xs text-slate-400">jane@northwind.com</div></td>
+              <td class="px-4 py-3"><div class="text-xs"><span class="text-slate-300">2</span><span class="text-slate-500"> admins</span></div><div class="text-xs"><span class="text-slate-300">7</span><span class="text-slate-500"> employees</span></div></td>
+              <td class="px-4 py-3 text-slate-300">May 4, 2026</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Active</span></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Suspend</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="px-4 py-3"><div class="font-semibold">Globex (pending)</div><div class="text-xs text-slate-400">—</div></td>
+              <td class="px-4 py-3"><div>Hank Hill</div><div class="text-xs text-slate-400">hank@globex.com</div></td>
+              <td class="px-4 py-3"><div class="text-xs"><span class="text-slate-300">1</span><span class="text-slate-500"> admin</span></div><div class="text-xs"><span class="text-slate-300">0</span><span class="text-slate-500"> employees</span></div></td>
+              <td class="px-4 py-3 text-slate-300">May 7, 2026</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-slate-500/20 px-2 py-0.5 text-xs text-slate-300">Suspended</span></td>
+              <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Reactivate</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="caption mb-16">/master/companies — super_admin only, manages every tenant</p>
+
   <!-- ─── WEB LOGIN ─── -->
   <div class="browser mb-16">
     <div class="chrome">

@@ -58,12 +58,27 @@ npm run dev
 
 Open <http://localhost:3000>.
 
+## Multi-tenancy
+
+The platform is multi-tenant. Each company registers itself, then invites its own employees. Data isolation is enforced at the database layer via RLS — Company A literally cannot read Company B's rows even if a bug tried.
+
+Three roles:
+
+| Role          | Where they live                        | Can see / do                                      |
+| ------------- | -------------------------------------- | ------------------------------------------------- |
+| `super_admin` | Outside any company (`company_id` null) | Every company and every record. Can suspend or delete companies. Master account. |
+| `admin`       | One company                            | All employees and time entries within their company. Invites new employees. |
+| `employee`    | One company                            | Their own time entries only.                      |
+
+Sign-up flow: `web-admin/register` → email confirmation (Supabase) → sign in → start using the app. The master admin is seeded via SQL only.
+
 ## Default credentials (seed)
 
 After running `supabase/seed.sql`:
 
-- Admin: `admin@example.com` / `Admin123!`
-- Employee: `employee@example.com` / `Employee123!`
+- Master admin: `master@example.com` / `Master123!`  (super_admin, no company)
+- Acme Corp admin: `admin@example.com` / `Admin123!`
+- Acme Corp employee: `employee@example.com` / `Employee123!`
 
 Change these immediately in production.
 
