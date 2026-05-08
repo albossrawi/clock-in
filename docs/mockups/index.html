@@ -63,6 +63,8 @@
 <section class="max-w-6xl mx-auto px-6 py-10">
   <h2 class="text-2xl font-semibold mb-8">Mobile (Expo)</h2>
 
+  <p class="text-slate-400 text-sm mb-6">Hover the buttons to see the lift + glow; click to see the press animation.</p>
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 justify-items-center">
 
     <!-- ─── LOGIN ─── -->
@@ -74,7 +76,7 @@
           <p class="text-slate-400 text-center mt-1 mb-8 text-sm">Sign in to start your shift</p>
           <input class="bg-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm mb-3" value="employee@example.com" readonly />
           <input class="bg-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm mb-4" value="••••••••••" readonly />
-          <button class="bg-blue-600 py-4 rounded-full font-semibold">Sign in</button>
+          <button class="bg-blue-600 py-4 rounded-full font-semibold shadow-xl shadow-blue-500/50 transition transform hover:-translate-y-0.5 active:scale-95">Sign in</button>
         </div>
       </div>
       <p class="caption">Login</p>
@@ -89,7 +91,7 @@
             <p class="text-xl font-semibold">Hi Sample Employee</p>
             <p class="text-slate-300 text-sm mt-2">Not clocked in</p>
           </div>
-          <button class="bg-green-600 py-7 rounded-full text-xl font-bold">Clock In</button>
+          <button class="bg-green-600 py-7 rounded-full text-xl font-bold shadow-2xl shadow-green-500/60 transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95">Clock In</button>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
       </div>
@@ -106,8 +108,8 @@
             <p class="text-slate-300 text-sm mt-2">Clocked in • 2 hours</p>
             <p class="text-slate-400 text-xs mt-1">since 9:14 AM</p>
           </div>
-          <button class="bg-amber-500 py-6 rounded-full text-lg font-bold mb-3">Start Break</button>
-          <button class="bg-red-600 py-6 rounded-full text-lg font-bold">Clock Out</button>
+          <button class="bg-amber-500 py-6 rounded-full text-lg font-bold mb-4 shadow-2xl shadow-amber-400/60 transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95">Start Break</button>
+          <button class="bg-red-600 py-6 rounded-full text-lg font-bold shadow-2xl shadow-red-500/60 transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95">Clock Out</button>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
       </div>
@@ -127,7 +129,7 @@
             <p class="text-slate-400 text-xs uppercase tracking-widest">On break</p>
             <p class="text-6xl font-bold my-2 tabular-nums">17:42</p>
             <p class="text-slate-400 text-sm">remaining</p>
-            <button class="bg-slate-700 px-6 py-3 rounded-full text-sm font-semibold mt-4">End break now</button>
+            <button class="bg-slate-700 px-6 py-3 rounded-full text-sm font-semibold mt-4 shadow-md transition transform active:scale-95 hover:bg-slate-600">End break now</button>
           </div>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
@@ -149,10 +151,10 @@
             <p class="text-base font-semibold mb-3">Change password</p>
             <input class="bg-slate-800 px-4 py-3 rounded-xl text-sm w-full mb-3" value="••••••••" readonly />
             <input class="bg-slate-800 px-4 py-3 rounded-xl text-sm w-full mb-3" value="••••••••" readonly />
-            <button class="bg-blue-600 py-4 rounded-full font-semibold w-full">Update password</button>
+            <button class="bg-blue-600 py-4 rounded-full font-semibold w-full shadow-xl shadow-blue-500/50 transition transform hover:-translate-y-0.5 active:scale-95">Update password</button>
           </div>
           <div class="mt-auto mb-2">
-            <button class="bg-red-600 py-4 rounded-full font-semibold w-full">Log out</button>
+            <button class="bg-red-600 py-4 rounded-full font-semibold w-full shadow-xl shadow-red-500/50 transition transform hover:-translate-y-0.5 active:scale-95">Log out</button>
           </div>
         </div>
         <div class="tabbar"><a>Home</a><a class="active">Settings</a></div>
@@ -253,7 +255,7 @@
           <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="+1 555-0100" readonly /></label>
         <label class="block"><span class="text-xs uppercase text-slate-400">Password (8+ chars)</span>
           <input class="mt-1 w-full rounded-lg bg-slate-900 px-4 py-2.5 ring-1 ring-slate-700" value="••••••••" readonly /></label>
-        <button class="w-full rounded-full bg-blue-600 py-3 font-semibold mt-2">Create company</button>
+        <button class="w-full rounded-full bg-blue-600 py-3 font-semibold mt-2 shadow-xl shadow-blue-500/50 transition transform hover:-translate-y-0.5 active:scale-95">Create company</button>
         <p class="text-center text-sm text-slate-400">Already have an account? <a class="text-blue-400">Sign in</a></p>
       </div>
     </div>
@@ -337,7 +339,7 @@
         </div>
         <input class="w-full rounded-lg bg-slate-900 px-4 py-3 ring-1 ring-slate-700" value="admin@example.com" readonly />
         <input class="w-full rounded-lg bg-slate-900 px-4 py-3 ring-1 ring-slate-700" value="••••••••" readonly />
-        <button class="w-full rounded-lg bg-blue-600 py-3 font-semibold">Sign in</button>
+        <button class="w-full rounded-full bg-blue-600 py-3 font-semibold shadow-xl shadow-blue-500/50 transition transform hover:-translate-y-0.5 active:scale-95">Sign in</button>
       </div>
     </div>
   </div>

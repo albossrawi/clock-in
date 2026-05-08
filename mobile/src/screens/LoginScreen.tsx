@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
+import AnimatedButton from '@/components/AnimatedButton';
 
 export default function LoginScreen() {
   const { signIn } = useAuth();
@@ -43,9 +44,16 @@ export default function LoginScreen() {
         placeholderTextColor="#94a3b8"
       />
 
-      <TouchableOpacity style={styles.button} onPress={onSubmit} disabled={submitting}>
-        {submitting ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Sign in</Text>}
-      </TouchableOpacity>
+      {submitting ? (
+        <View style={styles.loading}><ActivityIndicator color="#fff" /></View>
+      ) : (
+        <AnimatedButton
+          label="Sign in"
+          color="#2563eb"
+          onPress={onSubmit}
+          style={{ marginTop: 12 }}
+        />
+      )}
     </View>
   );
 }
@@ -63,12 +71,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
   },
-  button: {
-    backgroundColor: '#2563eb',
-    paddingVertical: 16,
-    borderRadius: 999,
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  loading: { paddingVertical: 28, marginTop: 12, alignItems: 'center' },
 });

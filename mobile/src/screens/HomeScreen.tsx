@@ -2,14 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   Alert,
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import * as Notifications from 'expo-notifications';
 import { format, formatDistanceToNowStrict } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -19,6 +17,7 @@ import {
   cancelNotification,
 } from '@/lib/notifications';
 import { Break, TimeEntry } from '@/types';
+import AnimatedButton from '@/components/AnimatedButton';
 
 const CLOCK_OUT_NOTIF_KEY = 'clock-out-notif-id';
 const BREAK_END_NOTIF_KEY = 'break-end-notif-id';
@@ -248,13 +247,13 @@ export default function HomeScreen() {
 
       <View style={styles.buttonStack}>
         {!isClockedIn && (
-          <BigButton label="Clock In" color="#16a34a" onPress={clockIn} disabled={busy} />
+          <AnimatedButton label="Clock In" color="#16a34a" onPress={clockIn} disabled={busy} />
         )}
 
         {isClockedIn && !onBreak && (
           <>
-            <BigButton label="Start Break" color="#f59e0b" onPress={startBreak} disabled={busy} />
-            <BigButton label="Clock Out" color="#dc2626" onPress={confirmClockOut} disabled={busy} />
+            <AnimatedButton label="Start Break" color="#f59e0b" onPress={startBreak} disabled={busy} />
+            <AnimatedButton label="Clock Out" color="#dc2626" onPress={confirmClockOut} disabled={busy} />
           </>
         )}
 
@@ -263,39 +262,19 @@ export default function HomeScreen() {
             <Text style={styles.breakLabel}>On break</Text>
             <Text style={styles.breakTimer}>{formatMs(breakRemaining)}</Text>
             <Text style={styles.muted}>remaining</Text>
-            <TouchableOpacity
-              style={[styles.smallButton, busy && styles.disabled]}
-              onPress={() => endBreak(false)}
-              disabled={busy}
-            >
-              <Text style={styles.smallButtonText}>End break now</Text>
-            </TouchableOpacity>
+            <View style={{ marginTop: 16 }}>
+              <AnimatedButton
+                label="End break now"
+                color="#334155"
+                onPress={() => endBreak(false)}
+                disabled={busy}
+                size="small"
+              />
+            </View>
           </View>
         )}
       </View>
     </ScrollView>
-  );
-}
-
-function BigButton({
-  label,
-  color,
-  onPress,
-  disabled,
-}: {
-  label: string;
-  color: string;
-  onPress: () => void;
-  disabled?: boolean;
-}) {
-  return (
-    <TouchableOpacity
-      style={[styles.bigButton, { backgroundColor: color }, disabled && styles.disabled]}
-      onPress={onPress}
-      disabled={disabled}
-    >
-      <Text style={styles.bigButtonText}>{label}</Text>
-    </TouchableOpacity>
   );
 }
 
@@ -313,13 +292,7 @@ const styles = StyleSheet.create({
   greeting: { fontSize: 22, color: '#f8fafc', fontWeight: '600' },
   status: { fontSize: 16, color: '#cbd5e1', marginTop: 8 },
   muted: { fontSize: 14, color: '#94a3b8', marginTop: 4 },
-  buttonStack: { gap: 16 },
-  bigButton: {
-    paddingVertical: 28,
-    borderRadius: 999,
-    alignItems: 'center',
-  },
-  bigButtonText: { color: '#fff', fontSize: 22, fontWeight: '700' },
+  buttonStack: { gap: 20 },
   breakCard: {
     backgroundColor: '#1e293b',
     borderRadius: 20,
@@ -328,13 +301,4 @@ const styles = StyleSheet.create({
   },
   breakLabel: { color: '#94a3b8', fontSize: 14, textTransform: 'uppercase', letterSpacing: 1 },
   breakTimer: { color: '#f8fafc', fontSize: 56, fontWeight: '700', marginVertical: 8, fontVariant: ['tabular-nums'] },
-  smallButton: {
-    backgroundColor: '#334155',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 999,
-    marginTop: 16,
-  },
-  smallButtonText: { color: '#f8fafc', fontWeight: '600' },
-  disabled: { opacity: 0.5 },
 });
