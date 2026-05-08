@@ -18,13 +18,15 @@ export default async function EntriesPage() {
   const [{ data: profiles }, { data: company }] = await Promise.all([
     supabase
       .from('profiles')
-      .select('id, full_name, role, is_active, shift_length_minutes, break_length_minutes')
+      .select(
+        'id, full_name, role, is_active, shift_length_minutes, break_length_minutes, scheduled_start, scheduled_days',
+      )
       .order('full_name'),
     callerProfile?.company_id
       ? supabase
           .from('companies')
           .select(
-            'daily_standard_minutes, daily_break_minutes, weekly_standard_minutes, overtime_multiplier',
+            'daily_standard_minutes, daily_break_minutes, weekly_standard_minutes, overtime_multiplier, early_threshold_minutes, late_threshold_minutes',
           )
           .eq('id', callerProfile.company_id)
           .single()
@@ -40,6 +42,8 @@ export default async function EntriesPage() {
           daily_break_minutes: 30,
           weekly_standard_minutes: 2220,
           overtime_multiplier: 1.5,
+          early_threshold_minutes: 5,
+          late_threshold_minutes: 5,
         }
       }
     />

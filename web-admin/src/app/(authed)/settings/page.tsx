@@ -27,7 +27,7 @@ export default async function SettingsPage() {
     supabase
       .from('companies')
       .select(
-        'id, name, timezone, daily_standard_minutes, daily_break_minutes, weekly_standard_minutes, overtime_multiplier',
+        'id, name, timezone, daily_standard_minutes, daily_break_minutes, weekly_standard_minutes, overtime_multiplier, warn_early_clock_in, warn_late_clock_in, early_threshold_minutes, late_threshold_minutes',
       )
       .eq('id', profile.company_id)
       .single(),

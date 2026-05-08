@@ -22,6 +22,10 @@ interface Company {
   daily_break_minutes: number;
   weekly_standard_minutes: number;
   overtime_multiplier: number;
+  warn_early_clock_in: boolean;
+  warn_late_clock_in: boolean;
+  early_threshold_minutes: number;
+  late_threshold_minutes: number;
 }
 
 const DAYS: { value: number; label: string }[] = [
@@ -63,6 +67,11 @@ export default function SettingsClient({
   const [breakMin, setBreakMin] = useState(company.daily_break_minutes);
   const [weeklyStd, setWeeklyStd] = useState(company.weekly_standard_minutes);
   const [otMult, setOtMult] = useState(Number(company.overtime_multiplier));
+  const [warnEarly, setWarnEarly] = useState(company.warn_early_clock_in);
+  const [warnLate, setWarnLate] = useState(company.warn_late_clock_in);
+  const [earlyThr, setEarlyThr] = useState(company.early_threshold_minutes);
+  const [lateThr, setLateThr] = useState(company.late_threshold_minutes);
+  const [savingWarnings, setSavingWarnings] = useState(false);
   const [editing, setEditing] = useState<ShiftType | null>(null);
   const [creating, setCreating] = useState(false);
   const [savingHours, setSavingHours] = useState(false);
@@ -88,6 +97,22 @@ export default function SettingsClient({
       })
       .eq('id', company.id);
     setSavingHours(false);
+    if (error) alert(error.message);
+    else alert('Saved.');
+  };
+
+  const saveWarnings = async () => {
+    setSavingWarnings(true);
+    const { error } = await supabase
+      .from('companies')
+      .update({
+        warn_early_clock_in: warnEarly,
+        warn_late_clock_in: warnLate,
+        early_threshold_minutes: earlyThr,
+        late_threshold_minutes: lateThr,
+      })
+      .eq('id', company.id);
+    setSavingWarnings(false);
     if (error) alert(error.message);
     else alert('Saved.');
   };
@@ -194,6 +219,58 @@ export default function SettingsClient({
           className="mt-4 rounded-full bg-blue-600 px-5 py-2 font-semibold shadow-lg shadow-blue-500/40 transition hover:-translate-y-0.5 active:scale-95 disabled:opacity-50"
         >
           {savingHours ? 'Saving…' : 'Save'}
+        </button>
+      </section>
+
+      {/* Early / late clock-in warnings */}
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+        <h2 className="text-xl font-semibold">Early / late clock-in warnings</h2>
+        <p className="mt-1 text-sm text-slate-400">
+          The mobile app compares the clock-in time to the employee&apos;s scheduled start (set on the
+          Employees page) and shows a confirmation if it&apos;s outside the grace window.
+        </p>
+
+        <div className="mt-4 space-y-3">
+          <label className="flex items-center gap-3 text-sm">
+            <input
+              type="checkbox"
+              checked={warnEarly}
+              onChange={(e) => setWarnEarly(e.target.checked)}
+              className="h-4 w-4"
+            />
+            Warn when an employee clocks in <strong className="font-semibold">early</strong>
+          </label>
+          <label className="flex items-center gap-3 text-sm">
+            <input
+              type="checkbox"
+              checked={warnLate}
+              onChange={(e) => setWarnLate(e.target.checked)}
+              className="h-4 w-4"
+            />
+            Warn when an employee clocks in <strong className="font-semibold">late</strong>
+          </label>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <NumField
+            label="Early grace (minutes)"
+            value={earlyThr}
+            onChange={setEarlyThr}
+            help={`No warning if clocked in within ${earlyThr} min before scheduled`}
+          />
+          <NumField
+            label="Late grace (minutes)"
+            value={lateThr}
+            onChange={setLateThr}
+            help={`No warning if clocked in within ${lateThr} min after scheduled`}
+          />
+        </div>
+        <button
+          onClick={saveWarnings}
+          disabled={savingWarnings}
+          className="mt-4 rounded-full bg-blue-600 px-5 py-2 font-semibold transition hover:-translate-y-0.5 active:scale-95 disabled:opacity-50"
+        >
+          {savingWarnings ? 'Saving…' : 'Save'}
         </button>
       </section>
 

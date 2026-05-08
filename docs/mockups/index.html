@@ -230,6 +230,25 @@
   </div>
 
   <div class="w-full max-w-md">
+    <div class="phone" style="height: auto;">
+      <div class="notch"></div>
+      <div class="screen justify-center" style="background: rgba(0,0,0,.55); padding: 80px 24px;">
+        <div class="bg-slate-700/95 rounded-2xl text-center overflow-hidden" style="backdrop-filter: blur(20px);">
+          <div class="px-6 py-5">
+            <p class="font-semibold text-base">Starting early</p>
+            <p class="text-sm text-slate-200 mt-1">You're starting 18 minutes before your scheduled time. Clock in now?</p>
+          </div>
+          <div class="border-t border-slate-500/40 grid grid-cols-2">
+            <button class="py-3 text-blue-300 font-medium border-r border-slate-500/40">Cancel</button>
+            <button class="py-3 text-blue-300 font-semibold">Clock in</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="caption">Early-clock-in confirmation (also a "Starting late" variant)</p>
+  </div>
+
+  <div class="w-full max-w-md">
     <div class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 flex gap-3 items-start">
       <div class="text-2xl">🔔</div>
       <div>
@@ -447,9 +466,10 @@
               <th class="px-4 py-3">Clock in</th>
               <th class="px-4 py-3">Clock out</th>
               <th class="px-4 py-3">Shift</th>
+              <th class="px-4 py-3">Status</th>
               <th class="px-4 py-3">Hours</th>
               <th class="px-4 py-3">OT</th>
-              <th class="px-4 py-3">Notes</th>
+              <th class="px-4 py-3">Loc</th>
               <th class="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -459,9 +479,10 @@
               <td class="px-4 py-3">May 7, 6:14 PM</td>
               <td class="px-4 py-3">May 7, 11:00 PM</td>
               <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-amber-500/20 text-amber-300">Evening</span></td>
+              <td class="px-4 py-3"><span class="text-xs text-slate-500">—</span></td>
               <td class="px-4 py-3">4.27</td>
               <td class="px-4 py-3 text-slate-400">0.00</td>
-              <td class="px-4 py-3 text-slate-300"></td>
+              <td class="px-4 py-3"><a class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">GPS</a></td>
               <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
             </tr>
             <tr class="border-t border-slate-800">
@@ -469,19 +490,21 @@
               <td class="px-4 py-3">May 6, 11:00 PM</td>
               <td class="px-4 py-3">May 7, 7:30 AM</td>
               <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-indigo-500/20 text-indigo-300">Night</span></td>
+              <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-rose-500/20 text-rose-300">Late 12m</span></td>
               <td class="px-4 py-3">8.00</td>
               <td class="px-4 py-3 text-amber-300 font-semibold">0.50</td>
-              <td class="px-4 py-3 text-slate-300"></td>
+              <td class="px-4 py-3"><a class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">GPS</a></td>
               <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
             </tr>
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Sample Employee</td>
-              <td class="px-4 py-3">May 5, 9:00 AM</td>
+              <td class="px-4 py-3">May 5, 8:42 AM</td>
               <td class="px-4 py-3">May 5, 5:11 PM</td>
               <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-slate-500/20 text-slate-300">Regular</span></td>
-              <td class="px-4 py-3">7.68</td>
-              <td class="px-4 py-3 text-slate-400">0.18</td>
-              <td class="px-4 py-3 text-slate-300"></td>
+              <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-sky-500/20 text-sky-300">Early 18m</span></td>
+              <td class="px-4 py-3">7.98</td>
+              <td class="px-4 py-3 text-amber-300 font-semibold">0.48</td>
+              <td class="px-4 py-3"><a class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">GPS</a></td>
               <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
             </tr>
             <tr class="border-t border-slate-800">
@@ -489,9 +512,10 @@
               <td class="px-4 py-3">May 4, 10:00 AM</td>
               <td class="px-4 py-3">May 4, 6:00 PM</td>
               <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold bg-fuchsia-500/20 text-fuchsia-300">Weekend</span></td>
+              <td class="px-4 py-3"><span class="text-xs text-slate-500">—</span></td>
               <td class="px-4 py-3">7.50</td>
               <td class="px-4 py-3 text-slate-400">0.00</td>
-              <td class="px-4 py-3 text-slate-300"></td>
+              <td class="px-4 py-3"><span class="text-xs text-slate-500">—</span></td>
               <td class="px-4 py-3 text-right"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-rose-700 px-3 py-1">Delete</button></td>
             </tr>
           </tbody>
@@ -568,6 +592,7 @@
             <tr>
               <th class="px-4 py-3">Name</th>
               <th class="px-4 py-3">Role</th>
+              <th class="px-4 py-3">Schedule</th>
               <th class="px-4 py-3">Shift / Break (min)</th>
               <th class="px-4 py-3">Status</th>
               <th class="px-4 py-3 text-right">Actions</th>
@@ -577,23 +602,26 @@
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Admin User</td>
               <td class="px-4 py-3 capitalize">admin</td>
+              <td class="px-4 py-3 text-slate-300"><div>09:00 – 17:00</div><div class="text-xs text-slate-500">Mon, Tue, Wed, Thu, Fri</div></td>
               <td class="px-4 py-3">450 / 30</td>
               <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-300 text-xs">Active</span></td>
-              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
+              <td class="px-4 py-3 text-right whitespace-nowrap"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
             </tr>
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Sample Employee</td>
               <td class="px-4 py-3 capitalize">employee</td>
+              <td class="px-4 py-3 text-slate-300"><div>09:00 – 17:30</div><div class="text-xs text-slate-500">Mon, Tue, Wed, Thu, Fri</div></td>
               <td class="px-4 py-3">450 / 30</td>
               <td class="px-4 py-3"><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-300 text-xs">Active</span></td>
-              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
+              <td class="px-4 py-3 text-right whitespace-nowrap"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-slate-700 px-3 py-1">Deactivate</button></td>
             </tr>
             <tr class="border-t border-slate-800">
               <td class="px-4 py-3">Jane Smith</td>
               <td class="px-4 py-3 capitalize">employee</td>
+              <td class="px-4 py-3 text-slate-500">Not set</td>
               <td class="px-4 py-3">480 / 45</td>
               <td class="px-4 py-3"><span class="rounded-full bg-slate-500/20 px-2 py-0.5 text-slate-300 text-xs">Inactive</span></td>
-              <td class="px-4 py-3 text-right"><button class="rounded bg-slate-700 px-3 py-1">Reactivate</button></td>
+              <td class="px-4 py-3 text-right whitespace-nowrap"><button class="mr-2 rounded bg-slate-700 px-3 py-1">Edit</button><button class="rounded bg-slate-700 px-3 py-1">Reactivate</button></td>
             </tr>
           </tbody>
         </table>
@@ -683,6 +711,29 @@
             <span class="text-xs uppercase text-slate-400">Overtime multiplier</span>
             <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="1.50" readonly />
             <span class="mt-1 block text-xs text-slate-500">OT paid at 1.50×</span>
+          </label>
+        </div>
+        <button class="mt-4 rounded-full bg-blue-600 px-5 py-2 font-semibold transition hover:-translate-y-0.5 active:scale-95">Save</button>
+      </section>
+
+      <!-- Early / late warnings -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+        <h2 class="text-xl font-semibold">Early / late clock-in warnings</h2>
+        <p class="mt-1 text-sm text-slate-400">The mobile app compares the clock-in time to the employee's scheduled start (set on the Employees page) and shows a confirmation if it's outside the grace window.</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center gap-3 text-sm"><input type="checkbox" class="h-4 w-4" checked /> Warn when an employee clocks in <strong>early</strong></label>
+          <label class="flex items-center gap-3 text-sm"><input type="checkbox" class="h-4 w-4" checked /> Warn when an employee clocks in <strong>late</strong></label>
+        </div>
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Early grace (minutes)</span>
+            <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="5" readonly />
+            <span class="mt-1 block text-xs text-slate-500">No warning if clocked in within 5 min before scheduled</span>
+          </label>
+          <label class="block">
+            <span class="text-xs uppercase text-slate-400">Late grace (minutes)</span>
+            <input class="mt-1 w-full rounded-lg bg-slate-900 px-3 py-2 ring-1 ring-slate-700" value="5" readonly />
+            <span class="mt-1 block text-xs text-slate-500">No warning if clocked in within 5 min after scheduled</span>
           </label>
         </div>
         <button class="mt-4 rounded-full bg-blue-600 px-5 py-2 font-semibold transition hover:-translate-y-0.5 active:scale-95">Save</button>

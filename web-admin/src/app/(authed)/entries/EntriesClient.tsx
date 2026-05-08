@@ -12,6 +12,8 @@ interface Profile {
   is_active: boolean;
   shift_length_minutes: number;
   break_length_minutes: number;
+  scheduled_start: string | null;
+  scheduled_days: number[] | null;
 }
 
 interface CompanyHours {
@@ -19,6 +21,8 @@ interface CompanyHours {
   daily_break_minutes: number;
   weekly_standard_minutes: number;
   overtime_multiplier: number;
+  early_threshold_minutes: number;
+  late_threshold_minutes: number;
 }
 
 interface Entry {
@@ -28,6 +32,11 @@ interface Entry {
   clock_out_at: string | null;
   notes: string | null;
   shift_type_id: string | null;
+  clock_in_lat: number | null;
+  clock_in_lng: number | null;
+  clock_in_accuracy_m: number | null;
+  clock_out_lat: number | null;
+  clock_out_lng: number | null;
   profiles?: { full_name: string | null } | null;
   shift_types?: { name: string; multiplier: number } | null;
 }
@@ -57,6 +66,29 @@ function overtimeMinutes(e: Entry, dailyStd: number, breakMin: number): number {
 function fmtH(min: number | null): string {
   if (min == null) return '—';
   return (min / 60).toFixed(2);
+}
+
+// Compare clock-in to the employee's scheduled start. Returns null if no
+// schedule, today wasn't a scheduled day, or it's inside the company's
+// grace window.
+function clockInStatus(
+  entry: Entry,
+  profile: Profile | undefined,
+  earlyThr: number,
+  lateThr: number,
+): { kind: 'early' | 'late'; minutes: number } | null {
+  if (!profile?.scheduled_start || !profile.scheduled_days?.length) return null;
+  const ci = parseISO(entry.clock_in_at);
+  const isoDow = ((ci.getDay() + 6) % 7) + 1;
+  if (!profile.scheduled_days.includes(isoDow)) return null;
+
+  const [hh, mm] = profile.scheduled_start.split(':').map(Number);
+  const scheduled = new Date(ci);
+  scheduled.setHours(hh ?? 0, mm ?? 0, 0, 0);
+  const diffMin = (ci.getTime() - scheduled.getTime()) / 60000;
+  if (diffMin < -earlyThr) return { kind: 'early', minutes: Math.round(-diffMin) };
+  if (diffMin > lateThr) return { kind: 'late', minutes: Math.round(diffMin) };
+  return null;
 }
 
 function shiftBadgeClass(name: string | null | undefined): string {
@@ -106,7 +138,7 @@ export default function EntriesClient({
     let q = supabase
       .from('time_entries')
       .select(
-        'id, user_id, clock_in_at, clock_out_at, notes, shift_type_id, profiles(full_name), shift_types(name, multiplier)',
+        'id, user_id, clock_in_at, clock_out_at, notes, shift_type_id, clock_in_lat, clock_in_lng, clock_in_accuracy_m, clock_out_lat, clock_out_lng, profiles(full_name), shift_types(name, multiplier)',
       )
       .gte('clock_in_at', `${from}T00:00:00.000Z`)
       .lte('clock_in_at', `${to}T23:59:59.999Z`)
@@ -155,19 +187,34 @@ export default function EntriesClient({
       rows.map((r) => {
         const w = workedMinutes(r, breakFor(r.user_id));
         const ot = overtimeMinutes(r, dailyStdFor(r.user_id), breakFor(r.user_id));
+        const status = clockInStatus(
+          r,
+          profileById[r.user_id],
+          company.early_threshold_minutes,
+          company.late_threshold_minutes,
+        );
         return {
           Employee: r.profiles?.full_name ?? r.user_id,
           'Clock in': format(parseISO(r.clock_in_at), 'yyyy-MM-dd HH:mm'),
           'Clock out': r.clock_out_at ? format(parseISO(r.clock_out_at), 'yyyy-MM-dd HH:mm') : '',
           Shift: r.shift_types?.name ?? 'Regular',
+          Status: status ? `${status.kind === 'early' ? 'Early' : 'Late'} ${status.minutes}m` : 'On time',
           'Hours worked': fmtH(w),
           'Overtime (h)': fmtH(ot),
           Multiplier: r.shift_types ? Number(r.shift_types.multiplier).toFixed(2) : '1.00',
+          'Clock-in location':
+            r.clock_in_lat != null && r.clock_in_lng != null
+              ? `${r.clock_in_lat.toFixed(5)}, ${r.clock_in_lng.toFixed(5)}`
+              : '',
+          'Clock-out location':
+            r.clock_out_lat != null && r.clock_out_lng != null
+              ? `${r.clock_out_lat.toFixed(5)}, ${r.clock_out_lng.toFixed(5)}`
+              : '',
           Notes: r.notes ?? '',
         };
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rows, profileById],
+    [rows, profileById, company.early_threshold_minutes, company.late_threshold_minutes],
   );
 
   const remove = async (id: string) => {
@@ -311,23 +358,24 @@ export default function EntriesClient({
               <th className="px-4 py-3">Clock in</th>
               <th className="px-4 py-3">Clock out</th>
               <th className="px-4 py-3">Shift</th>
+              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Hours</th>
               <th className="px-4 py-3">OT</th>
-              <th className="px-4 py-3">Notes</th>
+              <th className="px-4 py-3">Loc</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading && (
               <tr>
-                <td colSpan={8} className="px-4 py-6 text-center text-slate-400">
+                <td colSpan={9} className="px-4 py-6 text-center text-slate-400">
                   Loading…
                 </td>
               </tr>
             )}
             {!loading && rows.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-6 text-center text-slate-400">
+                <td colSpan={9} className="px-4 py-6 text-center text-slate-400">
                   No entries in this range.
                 </td>
               </tr>
@@ -337,6 +385,16 @@ export default function EntriesClient({
                 const w = workedMinutes(r, breakFor(r.user_id));
                 const ot = overtimeMinutes(r, dailyStdFor(r.user_id), breakFor(r.user_id));
                 const shiftName = r.shift_types?.name ?? null;
+                const status = clockInStatus(
+                  r,
+                  profileById[r.user_id],
+                  company.early_threshold_minutes,
+                  company.late_threshold_minutes,
+                );
+                const hasLoc = r.clock_in_lat != null && r.clock_in_lng != null;
+                const mapsUrl = hasLoc
+                  ? `https://www.google.com/maps/search/?api=1&query=${r.clock_in_lat},${r.clock_in_lng}`
+                  : null;
                 return (
                   <tr key={r.id} className="border-t border-slate-800 hover:bg-slate-800/40">
                     <td className="px-4 py-3">{r.profiles?.full_name ?? r.user_id.slice(0, 8)}</td>
@@ -351,11 +409,40 @@ export default function EntriesClient({
                         {shiftName ?? 'Regular'}
                       </span>
                     </td>
+                    <td className="px-4 py-3">
+                      {status ? (
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                            status.kind === 'early'
+                              ? 'bg-sky-500/20 text-sky-300'
+                              : 'bg-rose-500/20 text-rose-300'
+                          }`}
+                        >
+                          {status.kind === 'early' ? 'Early' : 'Late'} {status.minutes}m
+                        </span>
+                      ) : (
+                        <span className="text-xs text-slate-500">—</span>
+                      )}
+                    </td>
                     <td className="px-4 py-3">{fmtH(w)}</td>
                     <td className={`px-4 py-3 ${ot > 0 ? 'text-amber-300 font-semibold' : 'text-slate-400'}`}>
                       {fmtH(ot)}
                     </td>
-                    <td className="px-4 py-3 text-slate-300">{r.notes ?? ''}</td>
+                    <td className="px-4 py-3">
+                      {mapsUrl ? (
+                        <a
+                          href={mapsUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300 hover:bg-emerald-500/30"
+                          title={`±${r.clock_in_accuracy_m ?? '?'} m`}
+                        >
+                          GPS
+                        </a>
+                      ) : (
+                        <span className="text-xs text-slate-500">—</span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-right">
                       <button
                         onClick={() => setEditing(r)}

@@ -19,9 +19,10 @@ import {
 import { Break, TimeEntry } from '@/types';
 import ClockFaceButton from '@/components/ClockFaceButton';
 import CircleButton from '@/components/CircleButton';
+import { ensureLocationPermission, getCurrentLocation } from '@/lib/location';
 
 export default function HomeScreen() {
-  const { profile, session } = useAuth();
+  const { profile, session, companySettings } = useAuth();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -67,6 +68,9 @@ export default function HomeScreen() {
   useEffect(() => {
     (async () => {
       await ensureNotificationPermissions();
+      // Request location permission up-front; the user can still clock in
+      // if they decline (the location columns just stay null).
+      await ensureLocationPermission();
       await fetchState();
       setLoading(false);
     })();
@@ -95,14 +99,81 @@ export default function HomeScreen() {
     setRefreshing(false);
   };
 
-  const clockIn = async () => {
+  // Compare current time to the employee's scheduled start. Returns null if
+  // they have no schedule, today isn't a scheduled day, or they're inside the
+  // company's grace window (early_threshold / late_threshold minutes).
+  const scheduleStatus = (): { kind: 'early' | 'late'; minutes: number } | null => {
+    const start = profile?.scheduled_start;
+    const days = profile?.scheduled_days;
+    if (!start || !days || days.length === 0) return null;
+
+    const nowDate = new Date();
+    // JS getDay: 0=Sun..6=Sat ; we use ISO 1=Mon..7=Sun.
+    const isoDow = ((nowDate.getDay() + 6) % 7) + 1;
+    if (!days.includes(isoDow)) return null;
+
+    const [hh, mm] = start.split(':').map(Number);
+    const scheduled = new Date(nowDate);
+    scheduled.setHours(hh ?? 0, mm ?? 0, 0, 0);
+
+    const diffMin = (nowDate.getTime() - scheduled.getTime()) / 60000;
+    const earlyThr = companySettings?.early_threshold_minutes ?? 5;
+    const lateThr = companySettings?.late_threshold_minutes ?? 5;
+
+    if (diffMin < -earlyThr) return { kind: 'early', minutes: Math.round(-diffMin) };
+    if (diffMin > lateThr) return { kind: 'late', minutes: Math.round(diffMin) };
+    return null;
+  };
+
+  const clockIn = () => {
+    if (!session?.user || busy) return;
+    const status = scheduleStatus();
+
+    if (status?.kind === 'early' && companySettings?.warn_early_clock_in !== false) {
+      Alert.alert(
+        'Starting early',
+        `You're starting ${status.minutes} minute${status.minutes === 1 ? '' : 's'} before your scheduled time. Clock in now?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Clock in', onPress: () => void doClockIn() },
+        ],
+      );
+      return;
+    }
+
+    if (status?.kind === 'late' && companySettings?.warn_late_clock_in !== false) {
+      Alert.alert(
+        'Starting late',
+        `You're ${status.minutes} minute${status.minutes === 1 ? '' : 's'} past your scheduled start time.`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Clock in', onPress: () => void doClockIn() },
+        ],
+      );
+      return;
+    }
+
+    void doClockIn();
+  };
+
+  const doClockIn = async () => {
     if (!session?.user || busy) return;
     setBusy(true);
     try {
+      // Best-effort location capture. Null if the user denied permission
+      // or the GPS lookup failed (e.g. indoors with no fix).
+      const loc = await getCurrentLocation();
+
       const nowDate = new Date();
       const { data, error } = await supabase
         .from('time_entries')
-        .insert({ user_id: session.user.id, clock_in_at: nowDate.toISOString() })
+        .insert({
+          user_id: session.user.id,
+          clock_in_at: nowDate.toISOString(),
+          clock_in_lat: loc?.lat ?? null,
+          clock_in_lng: loc?.lng ?? null,
+          clock_in_accuracy_m: loc?.accuracy_m ? Math.round(loc.accuracy_m) : null,
+        })
         .select('*')
         .single();
       if (error) throw error;
@@ -140,9 +211,16 @@ export default function HomeScreen() {
     try {
       if (activeBreak) await endBreak(false);
 
+      const loc = await getCurrentLocation();
+
       const { error } = await supabase
         .from('time_entries')
-        .update({ clock_out_at: new Date().toISOString() })
+        .update({
+          clock_out_at: new Date().toISOString(),
+          clock_out_lat: loc?.lat ?? null,
+          clock_out_lng: loc?.lng ?? null,
+          clock_out_accuracy_m: loc?.accuracy_m ? Math.round(loc.accuracy_m) : null,
+        })
         .eq('id', entry.id);
       if (error) throw error;
 
