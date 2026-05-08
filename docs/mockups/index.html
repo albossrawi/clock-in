@@ -87,18 +87,17 @@
       <div class="phone">
         <div class="notch"></div>
         <div class="screen justify-center">
-          <div class="text-center mb-12">
-            <p class="text-xl font-semibold">Hi Sample Employee</p>
-            <p class="text-slate-300 text-sm mt-3">Not clocked in</p>
+          <p class="text-xl font-semibold text-center mb-6">Hi Sample Employee</p>
+          <p class="text-slate-300 text-sm text-center mb-6">Not clocked in</p>
+
+          <div class="self-center transition transform hover:-translate-y-1 active:scale-95 cursor-pointer">
+            <svg class="watch-face" data-accent="#16a34a" data-icon="login" width="240" height="240" viewBox="0 0 240 240"></svg>
+            <p class="text-center text-slate-100 font-semibold mt-3">Clock In</p>
           </div>
-          <button class="bg-green-600 py-6 rounded-full text-xl font-bold transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M16,7V3H14V7H10V3H8V7H7V12C7,14.41 8.72,16.43 11,16.9V21H13V16.9C15.28,16.43 17,14.41 17,12V7H16Z"/></svg>
-            Clock In
-          </button>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
       </div>
-      <p class="caption">Home — clocked out</p>
+      <p class="caption">Home — clocked out (live watch face)</p>
     </div>
 
     <!-- ─── HOME — CLOCKED IN ─── -->
@@ -106,24 +105,29 @@
       <div class="phone">
         <div class="notch"></div>
         <div class="screen justify-center">
-          <p class="text-xl font-semibold text-center mb-6">Hi Sample Employee</p>
-          <div class="bg-slate-800 rounded-3xl py-7 px-5 text-center mb-7">
-            <p class="text-slate-400 text-xs uppercase tracking-[0.2em]">Working time</p>
-            <p class="text-[3.4rem] font-extrabold my-1 tabular-nums tracking-wide">02:14:37</p>
-            <p class="text-slate-400 text-xs">since 7:14 PM</p>
+          <p class="text-sm font-semibold text-center mb-2">Hi Sample Employee</p>
+          <div class="bg-slate-800 rounded-3xl py-3 px-4 text-center mb-4">
+            <p class="text-slate-400 text-[9px] uppercase tracking-[0.2em]">Working time</p>
+            <p class="text-2xl font-extrabold my-0.5 tabular-nums tracking-wide">02:14:37</p>
+            <p class="text-slate-400 text-[9px]">since 7:14 PM</p>
           </div>
-          <button class="bg-amber-500 py-5 rounded-full text-lg font-bold mb-3 transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
-            Start Break
-          </button>
-          <button class="bg-red-600 py-5 rounded-full text-lg font-bold transition transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M22.11,21.46L2.39,1.73L1.11,3L7.18,9.07L7,9V12C7,14.41 8.72,16.43 11,16.9V21H13V16.9C13.5,16.79 13.97,16.61 14.4,16.36L20.84,22.73L22.11,21.46M11.83,12.96L8.81,9.94C8.94,11.5 9.81,12.85 11.83,12.96M16,7H10.94L8,4.06V3H10V7H14V3H16V7M17,7V12C17,12.5 16.91,12.97 16.79,13.43L18.34,15C18.76,14.07 19,13.04 19,12V7H17Z"/></svg>
-            Clock Out
-          </button>
+
+          <div class="flex flex-col items-center">
+            <div class="transition transform hover:-translate-y-1 active:scale-95 cursor-pointer">
+              <svg class="watch-face" data-accent="#dc2626" data-icon="logout" width="190" height="190" viewBox="0 0 190 190"></svg>
+              <p class="text-center text-slate-100 text-sm font-semibold mt-2">Clock Out</p>
+            </div>
+            <div class="flex flex-col items-center mt-5">
+              <button class="rounded-full bg-amber-500 transition transform hover:-translate-y-1 active:scale-95 flex items-center justify-center" style="width: 78px; height: 78px;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+              </button>
+              <p class="text-slate-100 text-xs font-semibold mt-2">Start Break</p>
+            </div>
+          </div>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
       </div>
-      <p class="caption">Home — working (live HH:MM:SS counter)</p>
+      <p class="caption">Home — working (live watch face for Clock Out)</p>
     </div>
 
     <!-- ─── HOME — ON BREAK ─── -->
@@ -136,10 +140,12 @@
             <p class="text-slate-400 text-xs uppercase tracking-[0.2em]">On break</p>
             <p class="text-6xl font-extrabold my-2 tabular-nums">17:42</p>
             <p class="text-slate-400 text-xs">remaining</p>
-            <button class="bg-slate-700 px-5 py-2.5 rounded-full text-sm font-semibold mt-4 transition transform active:scale-95 hover:bg-slate-600 inline-flex items-center gap-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21"/></svg>
-              End break now
-            </button>
+            <div class="flex flex-col items-center mt-4">
+              <button class="rounded-full bg-slate-700 transition transform active:scale-95 hover:bg-slate-600 flex items-center justify-center" style="width: 72px; height: 72px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21"/></svg>
+              </button>
+              <p class="text-slate-100 text-xs font-semibold mt-2">End break now</p>
+            </div>
           </div>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
@@ -736,6 +742,119 @@
 <footer class="text-center text-slate-500 text-sm py-12">
   Mockups only — actual screens are built from the same Tailwind classes in <code>mobile/src/screens/</code> and <code>web-admin/src/app/</code>.
 </footer>
+
+<script>
+  // Render every <svg class="watch-face"> element into a live analog clock.
+  // data-accent: ring + hand color, data-icon: 'login' | 'logout'
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function polar(cx, cy, deg, r) {
+    const rad = (deg - 90) * Math.PI / 180;
+    return { x: cx + Math.cos(rad) * r, y: cy + Math.sin(rad) * r };
+  }
+
+  function el(tag, attrs) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  const ICON_PATHS = {
+    // MaterialCommunityIcons-style "login" path (24x24 viewBox)
+    login: 'M10,17V14H3V10H10V7L15,12L10,17M10,2H19A2,2 0 0,1 21,4V20A2,2 0 0,1 19,22H10A2,2 0 0,1 8,20V18H10V20H19V4H10V6H8V4A2,2 0 0,1 10,2Z',
+    logout: 'M17,17.25V14H10V10H17V6.75L22.25,12L17,17.25M13,2A2,2 0 0,1 15,4V8H13V4H4V20H13V16H15V20A2,2 0 0,1 13,22H4A2,2 0 0,1 2,20V4A2,2 0 0,1 4,2H13Z',
+  };
+
+  function buildFace(svg) {
+    const w = +svg.getAttribute('width');
+    const accent = svg.dataset.accent;
+    const iconName = svg.dataset.icon;
+    const C = w / 2;
+    const OUTER = C - 4;
+    const NUMBER_R = OUTER - w * 0.09;
+    const numFont = Math.round(w * 0.075);
+
+    svg.innerHTML = '';
+
+    svg.appendChild(el('circle', { cx: C, cy: C, r: OUTER, fill: '#1e293b', stroke: accent, 'stroke-width': 3 }));
+
+    for (let i = 1; i <= 12; i++) {
+      const p = polar(C, C, i * 30, NUMBER_R);
+      const t = el('text', {
+        x: p.x, y: p.y + numFont * 0.35,
+        'font-size': numFont, 'font-weight': '600',
+        fill: '#cbd5e1', 'text-anchor': 'middle',
+        'font-family': 'system-ui, -apple-system, sans-serif',
+      });
+      t.textContent = i;
+      svg.appendChild(t);
+    }
+
+    for (let i = 0; i < 60; i++) {
+      if (i % 5 === 0) continue;
+      const a = polar(C, C, i * 6, OUTER - 4);
+      const b = polar(C, C, i * 6, OUTER - 9);
+      svg.appendChild(el('line', {
+        x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: '#475569', 'stroke-width': 1,
+      }));
+    }
+
+    const hourHand = el('line', { stroke: '#f8fafc', 'stroke-width': Math.max(3, w * 0.018), 'stroke-linecap': 'round' });
+    const minHand = el('line', { stroke: '#f8fafc', 'stroke-width': Math.max(2, w * 0.012), 'stroke-linecap': 'round' });
+    const secHand = el('line', { stroke: accent, 'stroke-width': 1.4, 'stroke-linecap': 'round' });
+    svg.appendChild(hourHand);
+    svg.appendChild(minHand);
+    svg.appendChild(secHand);
+
+    svg.appendChild(el('circle', {
+      cx: C, cy: C, r: Math.max(4, w * 0.022), fill: accent,
+    }));
+
+    // Icon complication
+    const iconBoxR = w * 0.14;
+    const iconY = C + w * 0.20;
+    svg.appendChild(el('rect', {
+      x: C - iconBoxR, y: iconY - iconBoxR * 0.85,
+      width: iconBoxR * 2, height: iconBoxR * 1.7,
+      rx: iconBoxR, ry: iconBoxR,
+      fill: '#0f172a', stroke: accent, 'stroke-width': 1.5,
+    }));
+    const iconScale = (iconBoxR * 1.3) / 24;
+    const iconG = el('g', {
+      transform: `translate(${C - iconBoxR * 0.65}, ${iconY - iconBoxR * 0.65}) scale(${iconScale})`,
+    });
+    const iconPath = el('path', { d: ICON_PATHS[iconName] || ICON_PATHS.login, fill: accent });
+    iconG.appendChild(iconPath);
+    svg.appendChild(iconG);
+
+    return { hourHand, minHand, secHand, C, OUTER };
+  }
+
+  function tick(face) {
+    const now = new Date();
+    const h = now.getHours() % 12;
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+    const hourDeg = h * 30 + m * 0.5;
+    const minDeg = m * 6 + s * 0.1;
+    const secDeg = s * 6;
+    const { hourHand, minHand, secHand, C, OUTER } = face;
+    const ht = polar(C, C, hourDeg, OUTER * 0.55);
+    const mt = polar(C, C, minDeg, OUTER * 0.78);
+    const st = polar(C, C, secDeg, OUTER * 0.85);
+    hourHand.setAttribute('x1', C); hourHand.setAttribute('y1', C);
+    hourHand.setAttribute('x2', ht.x); hourHand.setAttribute('y2', ht.y);
+    minHand.setAttribute('x1', C); minHand.setAttribute('y1', C);
+    minHand.setAttribute('x2', mt.x); minHand.setAttribute('y2', mt.y);
+    secHand.setAttribute('x1', C); secHand.setAttribute('y1', C);
+    secHand.setAttribute('x2', st.x); secHand.setAttribute('y2', st.y);
+  }
+
+  const faces = Array.from(document.querySelectorAll('svg.watch-face')).map(buildFace);
+  const tickAll = () => faces.forEach(tick);
+  tickAll();
+  setInterval(tickAll, 1000);
+</script>
 
 </body>
 </html>

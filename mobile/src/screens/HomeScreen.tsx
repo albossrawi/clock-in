@@ -17,7 +17,8 @@ import {
   cancelNotification,
 } from '@/lib/notifications';
 import { Break, TimeEntry } from '@/types';
-import AnimatedButton from '@/components/AnimatedButton';
+import ClockFaceButton from '@/components/ClockFaceButton';
+import CircleButton from '@/components/CircleButton';
 
 export default function HomeScreen() {
   const { profile, session } = useAuth();
@@ -240,54 +241,59 @@ export default function HomeScreen() {
         </View>
       )}
 
-      <View style={styles.buttonStack}>
-        {!isClockedIn && (
-          <AnimatedButton
-            label="Clock In"
-            color="#16a34a"
-            icon="power-plug"
+      {!isClockedIn && (
+        <View style={styles.singleButton}>
+          <ClockFaceButton
             onPress={clockIn}
             disabled={busy}
+            accent="#16a34a"
+            icon="login"
+            size={260}
+            label="Clock In"
           />
-        )}
+        </View>
+      )}
 
-        {isClockedIn && !onBreak && (
-          <>
-            <AnimatedButton
-              label="Start Break"
-              color="#f59e0b"
-              icon="coffee-outline"
+      {isClockedIn && !onBreak && (
+        <View style={styles.actionStack}>
+          <ClockFaceButton
+            onPress={confirmClockOut}
+            disabled={busy}
+            accent="#dc2626"
+            icon="logout"
+            size={220}
+            label="Clock Out"
+          />
+          <View style={{ marginTop: 28 }}>
+            <CircleButton
               onPress={startBreak}
               disabled={busy}
+              color="#f59e0b"
+              icon="coffee-outline"
+              label="Start Break"
+              size={92}
             />
-            <AnimatedButton
-              label="Clock Out"
-              color="#dc2626"
-              icon="power-plug-off"
-              onPress={confirmClockOut}
-              disabled={busy}
-            />
-          </>
-        )}
-
-        {isClockedIn && onBreak && (
-          <View style={styles.breakCard}>
-            <Text style={styles.breakLabel}>On break</Text>
-            <Text style={styles.breakTimer}>{formatMs(breakRemaining)}</Text>
-            <Text style={styles.timerSub}>remaining</Text>
-            <View style={{ marginTop: 16 }}>
-              <AnimatedButton
-                label="End break now"
-                color="#334155"
-                icon="play"
-                onPress={() => endBreak(false)}
-                disabled={busy}
-                size="small"
-              />
-            </View>
           </View>
-        )}
-      </View>
+        </View>
+      )}
+
+      {isClockedIn && onBreak && (
+        <View style={styles.breakCard}>
+          <Text style={styles.breakLabel}>On break</Text>
+          <Text style={styles.breakTimer}>{formatMs(breakRemaining)}</Text>
+          <Text style={styles.timerSub}>remaining</Text>
+          <View style={{ marginTop: 18 }}>
+            <CircleButton
+              onPress={() => endBreak(false)}
+              disabled={busy}
+              color="#334155"
+              icon="play"
+              label="End break now"
+              size={88}
+            />
+          </View>
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -342,7 +348,8 @@ const styles = StyleSheet.create({
   },
   timerSub: { color: '#94a3b8', fontSize: 13 },
 
-  buttonStack: { gap: 16 },
+  singleButton: { alignItems: 'center', marginTop: 8 },
+  actionStack: { alignItems: 'center' },
 
   breakCard: {
     backgroundColor: '#1e293b',
