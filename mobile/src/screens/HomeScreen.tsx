@@ -17,7 +17,6 @@ import {
   cancelNotification,
 } from '@/lib/notifications';
 import { Break, TimeEntry } from '@/types';
-import ClockFaceButton from '@/components/ClockFaceButton';
 import CircleButton from '@/components/CircleButton';
 import { ensureLocationPermission, getCurrentLocation } from '@/lib/location';
 
@@ -321,37 +320,35 @@ export default function HomeScreen() {
 
       {!isClockedIn && (
         <View style={styles.singleButton}>
-          <ClockFaceButton
+          <CircleButton
             onPress={clockIn}
             disabled={busy}
-            accent="#16a34a"
+            color="#16a34a"
             icon="login"
-            size={260}
             label="Clock In"
+            size={200}
           />
         </View>
       )}
 
       {isClockedIn && !onBreak && (
-        <View style={styles.actionStack}>
-          <ClockFaceButton
+        <View style={styles.actionRow}>
+          <CircleButton
+            onPress={startBreak}
+            disabled={busy}
+            color="#f59e0b"
+            icon="coffee-outline"
+            label="Start Break"
+            size={120}
+          />
+          <CircleButton
             onPress={confirmClockOut}
             disabled={busy}
-            accent="#dc2626"
+            color="#dc2626"
             icon="logout"
-            size={220}
             label="Clock Out"
+            size={120}
           />
-          <View style={{ marginTop: 28 }}>
-            <CircleButton
-              onPress={startBreak}
-              disabled={busy}
-              color="#f59e0b"
-              icon="coffee-outline"
-              label="Start Break"
-              size={92}
-            />
-          </View>
         </View>
       )}
 
@@ -427,7 +424,12 @@ const styles = StyleSheet.create({
   timerSub: { color: '#94a3b8', fontSize: 13 },
 
   singleButton: { alignItems: 'center', marginTop: 8 },
-  actionStack: { alignItems: 'center' },
+  actionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+    gap: 24,
+  },
 
   breakCard: {
     backgroundColor: '#1e293b',
