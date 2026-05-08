@@ -48,7 +48,7 @@ export default function HomeScreen() {
     if (!session?.user) return;
     const { data: openEntries } = await supabase
       .from('time_entries')
-      .select('*')
+      .select('*, shift_types(name, multiplier)')
       .eq('user_id', session.user.id)
       .is('clock_out_at', null)
       .order('clock_in_at', { ascending: false })
@@ -110,7 +110,7 @@ export default function HomeScreen() {
       const { data, error } = await supabase
         .from('time_entries')
         .insert({ user_id: session.user.id, clock_in_at: nowDate.toISOString() })
-        .select('*')
+        .select('*, shift_types(name, multiplier)')
         .single();
       if (error) throw error;
       setEntry(data as TimeEntry);
@@ -243,6 +243,16 @@ export default function HomeScreen() {
             since {format(new Date(entry.clock_in_at), 'p')}
           </Text>
         )}
+        {entry && entry.shift_types?.name && (
+          <View style={[styles.shiftBadge, shiftBadgeStyles(entry.shift_types.name)]}>
+            <Text style={styles.shiftBadgeText}>
+              {entry.shift_types.name} shift
+              {entry.shift_types.multiplier && Number(entry.shift_types.multiplier) !== 1
+                ? `  ·  ${Number(entry.shift_types.multiplier).toFixed(2)}×`
+                : ''}
+            </Text>
+          </View>
+        )}
       </View>
 
       <View style={styles.buttonStack}>
@@ -285,6 +295,19 @@ function formatMs(ms: number): string {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+function shiftBadgeStyles(name: string) {
+  switch (name.toLowerCase()) {
+    case 'evening':
+      return { backgroundColor: 'rgba(245, 158, 11, 0.18)', borderColor: 'rgba(245, 158, 11, 0.5)' };
+    case 'night':
+      return { backgroundColor: 'rgba(99, 102, 241, 0.18)', borderColor: 'rgba(99, 102, 241, 0.5)' };
+    case 'weekend':
+      return { backgroundColor: 'rgba(217, 70, 239, 0.18)', borderColor: 'rgba(217, 70, 239, 0.5)' };
+    default:
+      return { backgroundColor: 'rgba(100, 116, 139, 0.2)', borderColor: 'rgba(100, 116, 139, 0.4)' };
+  }
+}
+
 const styles = StyleSheet.create({
   container: { flexGrow: 1, backgroundColor: '#0f172a', padding: 24, justifyContent: 'center' },
   center: { alignItems: 'center', justifyContent: 'center' },
@@ -293,6 +316,19 @@ const styles = StyleSheet.create({
   status: { fontSize: 16, color: '#cbd5e1', marginTop: 8 },
   muted: { fontSize: 14, color: '#94a3b8', marginTop: 4 },
   buttonStack: { gap: 20 },
+  shiftBadge: {
+    marginTop: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: 1,
+  },
+  shiftBadgeText: {
+    color: '#f8fafc',
+    fontSize: 13,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
   breakCard: {
     backgroundColor: '#1e293b',
     borderRadius: 20,

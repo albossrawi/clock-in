@@ -58,6 +58,12 @@ npm run dev
 
 Open <http://localhost:3000>.
 
+## Shift types and overtime
+
+Each company configures its own shift types (Evening, Night, Weekend by default) on `/settings`. Every clock-in is **auto-tagged** by a Postgres trigger based on the company's timezone and the time of day — employees never have to choose. Daytime hours that don't match any rule stay unlabelled ("Regular").
+
+Overtime is calculated per entry against `companies.daily_standard_minutes` (default 7.5h) minus `daily_break_minutes` (default 30m). Per-employee overrides on the `profiles` row take precedence. The entries page also shows weekly totals and weekly overtime against `companies.weekly_standard_minutes` (default 37h). Both day and week numbers appear in Excel/PDF exports.
+
 ## Multi-tenancy
 
 The platform is multi-tenant. Each company registers itself, then invites its own employees. Data isolation is enforced at the database layer via RLS — Company A literally cannot read Company B's rows even if a bug tried.

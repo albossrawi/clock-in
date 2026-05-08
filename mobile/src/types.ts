@@ -15,6 +15,8 @@ export interface TimeEntry {
   clock_in_at: string;
   clock_out_at: string | null;
   notes: string | null;
+  shift_type_id?: string | null;
+  shift_types?: { name: string; multiplier: number } | null;
 }
 
 export interface Break {

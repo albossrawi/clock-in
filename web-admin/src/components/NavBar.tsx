@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase-browser';
 const links = [
   { href: '/entries', label: 'Time entries' },
   { href: '/employees', label: 'Employees' },
+  { href: '/settings', label: 'Settings' },
 ];
 
 export default function NavBar({ email }: { email: string | null }) {
