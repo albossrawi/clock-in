@@ -8,7 +8,7 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import { format, formatDistanceToNowStrict } from 'date-fns';
+import { format } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import {
@@ -18,14 +18,6 @@ import {
 } from '@/lib/notifications';
 import { Break, TimeEntry } from '@/types';
 import AnimatedButton from '@/components/AnimatedButton';
-
-const CLOCK_OUT_NOTIF_KEY = 'clock-out-notif-id';
-const BREAK_END_NOTIF_KEY = 'break-end-notif-id';
-
-// Scheduled notification IDs are kept in module-scope refs so they survive
-// re-renders. They're also durable across app cold-starts because we cancel
-// by *content* on clock-out (Notifications.cancelAllScheduledNotificationsAsync
-// is too aggressive for production, but acceptable for a single-purpose app).
 
 export default function HomeScreen() {
   const { profile, session } = useAuth();
@@ -48,7 +40,7 @@ export default function HomeScreen() {
     if (!session?.user) return;
     const { data: openEntries } = await supabase
       .from('time_entries')
-      .select('*, shift_types(name, multiplier)')
+      .select('*')
       .eq('user_id', session.user.id)
       .is('clock_out_at', null)
       .order('clock_in_at', { ascending: false })
@@ -79,7 +71,7 @@ export default function HomeScreen() {
     })();
   }, [fetchState]);
 
-  // Tick once a second so countdowns + elapsed labels update.
+  // Tick once a second so the live timer + countdown update.
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
@@ -110,7 +102,7 @@ export default function HomeScreen() {
       const { data, error } = await supabase
         .from('time_entries')
         .insert({ user_id: session.user.id, clock_in_at: nowDate.toISOString() })
-        .select('*, shift_types(name, multiplier)')
+        .select('*')
         .single();
       if (error) throw error;
       setEntry(data as TimeEntry);
@@ -145,7 +137,6 @@ export default function HomeScreen() {
     if (!entry || busy) return;
     setBusy(true);
     try {
-      // Close any open break first.
       if (activeBreak) await endBreak(false);
 
       const { error } = await supabase
@@ -224,46 +215,58 @@ export default function HomeScreen() {
   const breakRemaining = activeBreak
     ? Math.max(0, new Date(activeBreak.start_at).getTime() + breakLengthMs - now)
     : 0;
-  const elapsedSinceClockIn = entry
-    ? formatDistanceToNowStrict(new Date(entry.clock_in_at))
-    : null;
+  const liveElapsed = entry ? formatHms(now - new Date(entry.clock_in_at).getTime()) : null;
 
   return (
     <ScrollView
       contentContainerStyle={styles.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#f8fafc" />}
     >
-      <View style={styles.header}>
+      <View style={styles.greetingBlock}>
         <Text style={styles.greeting}>Hi {profile?.full_name ?? 'there'}</Text>
-        <Text style={styles.status}>
-          {isClockedIn ? `Clocked in • ${elapsedSinceClockIn}` : 'Not clocked in'}
-        </Text>
-        {entry && (
-          <Text style={styles.muted}>
-            since {format(new Date(entry.clock_in_at), 'p')}
-          </Text>
-        )}
-        {entry && entry.shift_types?.name && (
-          <View style={[styles.shiftBadge, shiftBadgeStyles(entry.shift_types.name)]}>
-            <Text style={styles.shiftBadgeText}>
-              {entry.shift_types.name} shift
-              {entry.shift_types.multiplier && Number(entry.shift_types.multiplier) !== 1
-                ? `  ·  ${Number(entry.shift_types.multiplier).toFixed(2)}×`
-                : ''}
-            </Text>
-          </View>
-        )}
       </View>
+
+      {isClockedIn && (
+        <View style={styles.timerCard}>
+          <Text style={styles.timerLabel}>Working time</Text>
+          <Text style={styles.timer}>{liveElapsed}</Text>
+          <Text style={styles.timerSub}>since {format(new Date(entry!.clock_in_at), 'p')}</Text>
+        </View>
+      )}
+
+      {!isClockedIn && (
+        <View style={styles.idleBlock}>
+          <Text style={styles.idleStatus}>Not clocked in</Text>
+        </View>
+      )}
 
       <View style={styles.buttonStack}>
         {!isClockedIn && (
-          <AnimatedButton label="Clock In" color="#16a34a" onPress={clockIn} disabled={busy} />
+          <AnimatedButton
+            label="Clock In"
+            color="#16a34a"
+            icon="power-plug"
+            onPress={clockIn}
+            disabled={busy}
+          />
         )}
 
         {isClockedIn && !onBreak && (
           <>
-            <AnimatedButton label="Start Break" color="#f59e0b" onPress={startBreak} disabled={busy} />
-            <AnimatedButton label="Clock Out" color="#dc2626" onPress={confirmClockOut} disabled={busy} />
+            <AnimatedButton
+              label="Start Break"
+              color="#f59e0b"
+              icon="coffee-outline"
+              onPress={startBreak}
+              disabled={busy}
+            />
+            <AnimatedButton
+              label="Clock Out"
+              color="#dc2626"
+              icon="power-plug-off"
+              onPress={confirmClockOut}
+              disabled={busy}
+            />
           </>
         )}
 
@@ -271,11 +274,12 @@ export default function HomeScreen() {
           <View style={styles.breakCard}>
             <Text style={styles.breakLabel}>On break</Text>
             <Text style={styles.breakTimer}>{formatMs(breakRemaining)}</Text>
-            <Text style={styles.muted}>remaining</Text>
+            <Text style={styles.timerSub}>remaining</Text>
             <View style={{ marginTop: 16 }}>
               <AnimatedButton
                 label="End break now"
                 color="#334155"
+                icon="play"
                 onPress={() => endBreak(false)}
                 disabled={busy}
                 size="small"
@@ -295,46 +299,63 @@ function formatMs(ms: number): string {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
-function shiftBadgeStyles(name: string) {
-  switch (name.toLowerCase()) {
-    case 'evening':
-      return { backgroundColor: 'rgba(245, 158, 11, 0.18)', borderColor: 'rgba(245, 158, 11, 0.5)' };
-    case 'night':
-      return { backgroundColor: 'rgba(99, 102, 241, 0.18)', borderColor: 'rgba(99, 102, 241, 0.5)' };
-    case 'weekend':
-      return { backgroundColor: 'rgba(217, 70, 239, 0.18)', borderColor: 'rgba(217, 70, 239, 0.5)' };
-    default:
-      return { backgroundColor: 'rgba(100, 116, 139, 0.2)', borderColor: 'rgba(100, 116, 139, 0.4)' };
-  }
+function formatHms(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s
+    .toString()
+    .padStart(2, '0')}`;
 }
 
 const styles = StyleSheet.create({
   container: { flexGrow: 1, backgroundColor: '#0f172a', padding: 24, justifyContent: 'center' },
   center: { alignItems: 'center', justifyContent: 'center' },
-  header: { alignItems: 'center', marginBottom: 48 },
+  greetingBlock: { alignItems: 'center', marginBottom: 24 },
   greeting: { fontSize: 22, color: '#f8fafc', fontWeight: '600' },
-  status: { fontSize: 16, color: '#cbd5e1', marginTop: 8 },
-  muted: { fontSize: 14, color: '#94a3b8', marginTop: 4 },
-  buttonStack: { gap: 20 },
-  shiftBadge: {
-    marginTop: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 999,
-    borderWidth: 1,
+
+  idleBlock: { alignItems: 'center', marginBottom: 36 },
+  idleStatus: { color: '#94a3b8', fontSize: 16 },
+
+  timerCard: {
+    backgroundColor: '#1e293b',
+    borderRadius: 28,
+    paddingVertical: 28,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    marginBottom: 32,
   },
-  shiftBadgeText: {
+  timerLabel: {
+    color: '#94a3b8',
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+  },
+  timer: {
     color: '#f8fafc',
-    fontSize: 13,
-    fontWeight: '600',
-    letterSpacing: 0.3,
+    fontSize: 56,
+    fontWeight: '800',
+    fontVariant: ['tabular-nums'],
+    marginVertical: 6,
+    letterSpacing: 1,
   },
+  timerSub: { color: '#94a3b8', fontSize: 13 },
+
+  buttonStack: { gap: 16 },
+
   breakCard: {
     backgroundColor: '#1e293b',
-    borderRadius: 20,
+    borderRadius: 28,
     padding: 32,
     alignItems: 'center',
   },
-  breakLabel: { color: '#94a3b8', fontSize: 14, textTransform: 'uppercase', letterSpacing: 1 },
-  breakTimer: { color: '#f8fafc', fontSize: 56, fontWeight: '700', marginVertical: 8, fontVariant: ['tabular-nums'] },
+  breakLabel: { color: '#94a3b8', fontSize: 12, textTransform: 'uppercase', letterSpacing: 2 },
+  breakTimer: {
+    color: '#f8fafc',
+    fontSize: 56,
+    fontWeight: '800',
+    marginVertical: 6,
+    fontVariant: ['tabular-nums'],
+  },
 });

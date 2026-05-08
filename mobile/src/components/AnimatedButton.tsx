@@ -4,25 +4,27 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  View,
   ViewStyle,
   TextStyle,
   StyleProp,
-  Platform,
 } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface Props {
   label: string;
-  color: string;             // base background, also used for glow
+  color: string;
   onPress: () => void;
   disabled?: boolean;
   size?: 'big' | 'small';
+  icon?: keyof typeof MaterialCommunityIcons.glyphMap;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
 }
 
 /**
- * Pill-shaped button with a colored shadow ("glow") and a small scale + opacity
- * press animation. Uses native driver so the animation runs on the UI thread.
+ * Pill-shaped button with a subtle scale + opacity press animation.
+ * Native driver so the animation runs on the UI thread.
  */
 export default function AnimatedButton({
   label,
@@ -30,6 +32,7 @@ export default function AnimatedButton({
   onPress,
   disabled,
   size = 'big',
+  icon,
   style,
   textStyle,
 }: Props) {
@@ -45,24 +48,10 @@ export default function AnimatedButton({
 
   const sizeStyle = size === 'big' ? styles.big : styles.small;
   const textSize = size === 'big' ? styles.bigText : styles.smallText;
+  const iconSize = size === 'big' ? 26 : 18;
 
   return (
-    <Animated.View
-      style={[
-        { transform: [{ scale }] },
-        // Coloured drop-shadow gives a glow on iOS; Android uses elevation
-        // which can't be tinted, so we lean on the bright bg color instead.
-        Platform.OS === 'ios'
-          ? {
-              shadowColor: color,
-              shadowOpacity: disabled ? 0 : 0.5,
-              shadowRadius: 14,
-              shadowOffset: { width: 0, height: 6 },
-            }
-          : { elevation: disabled ? 0 : 6 },
-        style,
-      ]}
-    >
+    <Animated.View style={[{ transform: [{ scale }] }, style]}>
       <Pressable
         onPress={onPress}
         onPressIn={() => animateTo(0.96)}
@@ -75,7 +64,10 @@ export default function AnimatedButton({
           pressed && styles.pressed,
         ]}
       >
-        <Text style={[textSize, textStyle]}>{label}</Text>
+        <View style={styles.content}>
+          {icon && <MaterialCommunityIcons name={icon} size={iconSize} color="#fff" />}
+          <Text style={[textSize, textStyle]}>{label}</Text>
+        </View>
       </Pressable>
     </Animated.View>
   );
@@ -83,19 +75,25 @@ export default function AnimatedButton({
 
 const styles = StyleSheet.create({
   big: {
-    paddingVertical: 28,
+    paddingVertical: 24,
+    paddingHorizontal: 24,
     borderRadius: 999,
-    alignItems: 'center',
   },
   small: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 22,
     paddingVertical: 12,
     borderRadius: 999,
-    alignItems: 'center',
     alignSelf: 'center',
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
   },
   bigText: { color: '#fff', fontSize: 22, fontWeight: '700', letterSpacing: 0.3 },
   smallText: { color: '#f8fafc', fontSize: 14, fontWeight: '600' },
   disabled: { opacity: 0.5 },
   pressed: { opacity: 0.92 },
 });
+
