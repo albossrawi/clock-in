@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
   },
-  button: { backgroundColor: '#2563eb', paddingVertical: 16, borderRadius: 12, alignItems: 'center' },
+  button: { backgroundColor: '#2563eb', paddingVertical: 16, borderRadius: 999, alignItems: 'center' },
   danger: { backgroundColor: '#dc2626' },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
 });

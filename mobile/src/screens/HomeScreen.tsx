@@ -130,7 +130,19 @@ export default function HomeScreen() {
     }
   };
 
-  const clockOut = async () => {
+  const confirmClockOut = () => {
+    if (!entry || busy) return;
+    Alert.alert(
+      'Clock out?',
+      "This ends your shift. You can't undo this.",
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Clock out', style: 'destructive', onPress: () => void doClockOut() },
+      ],
+    );
+  };
+
+  const doClockOut = async () => {
     if (!entry || busy) return;
     setBusy(true);
     try {
@@ -242,7 +254,7 @@ export default function HomeScreen() {
         {isClockedIn && !onBreak && (
           <>
             <BigButton label="Start Break" color="#f59e0b" onPress={startBreak} disabled={busy} />
-            <BigButton label="Clock Out" color="#dc2626" onPress={clockOut} disabled={busy} />
+            <BigButton label="Clock Out" color="#dc2626" onPress={confirmClockOut} disabled={busy} />
           </>
         )}
 
@@ -304,7 +316,7 @@ const styles = StyleSheet.create({
   buttonStack: { gap: 16 },
   bigButton: {
     paddingVertical: 28,
-    borderRadius: 20,
+    borderRadius: 999,
     alignItems: 'center',
   },
   bigButtonText: { color: '#fff', fontSize: 22, fontWeight: '700' },
@@ -320,7 +332,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#334155',
     paddingHorizontal: 24,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: 999,
     marginTop: 16,
   },
   smallButtonText: { color: '#f8fafc', fontWeight: '600' },

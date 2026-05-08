@@ -74,7 +74,7 @@
           <p class="text-slate-400 text-center mt-1 mb-8 text-sm">Sign in to start your shift</p>
           <input class="bg-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm mb-3" value="employee@example.com" readonly />
           <input class="bg-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm mb-4" value="••••••••••" readonly />
-          <button class="bg-blue-600 py-4 rounded-xl font-semibold">Sign in</button>
+          <button class="bg-blue-600 py-4 rounded-full font-semibold">Sign in</button>
         </div>
       </div>
       <p class="caption">Login</p>
@@ -89,7 +89,7 @@
             <p class="text-xl font-semibold">Hi Sample Employee</p>
             <p class="text-slate-300 text-sm mt-2">Not clocked in</p>
           </div>
-          <button class="bg-green-600 py-7 rounded-2xl text-xl font-bold">Clock In</button>
+          <button class="bg-green-600 py-7 rounded-full text-xl font-bold">Clock In</button>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
       </div>
@@ -106,8 +106,8 @@
             <p class="text-slate-300 text-sm mt-2">Clocked in • 2 hours</p>
             <p class="text-slate-400 text-xs mt-1">since 9:14 AM</p>
           </div>
-          <button class="bg-amber-500 py-6 rounded-2xl text-lg font-bold mb-3">Start Break</button>
-          <button class="bg-red-600 py-6 rounded-2xl text-lg font-bold">Clock Out</button>
+          <button class="bg-amber-500 py-6 rounded-full text-lg font-bold mb-3">Start Break</button>
+          <button class="bg-red-600 py-6 rounded-full text-lg font-bold">Clock Out</button>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
       </div>
@@ -127,7 +127,7 @@
             <p class="text-slate-400 text-xs uppercase tracking-widest">On break</p>
             <p class="text-6xl font-bold my-2 tabular-nums">17:42</p>
             <p class="text-slate-400 text-sm">remaining</p>
-            <button class="bg-slate-700 px-6 py-3 rounded-lg text-sm font-semibold mt-4">End break now</button>
+            <button class="bg-slate-700 px-6 py-3 rounded-full text-sm font-semibold mt-4">End break now</button>
           </div>
         </div>
         <div class="tabbar"><a class="active">Home</a><a>Settings</a></div>
@@ -149,10 +149,10 @@
             <p class="text-base font-semibold mb-3">Change password</p>
             <input class="bg-slate-800 px-4 py-3 rounded-xl text-sm w-full mb-3" value="••••••••" readonly />
             <input class="bg-slate-800 px-4 py-3 rounded-xl text-sm w-full mb-3" value="••••••••" readonly />
-            <button class="bg-blue-600 py-4 rounded-xl font-semibold w-full">Update password</button>
+            <button class="bg-blue-600 py-4 rounded-full font-semibold w-full">Update password</button>
           </div>
           <div class="mt-auto mb-2">
-            <button class="bg-red-600 py-4 rounded-xl font-semibold w-full">Log out</button>
+            <button class="bg-red-600 py-4 rounded-full font-semibold w-full">Log out</button>
           </div>
         </div>
         <div class="tabbar"><a>Home</a><a class="active">Settings</a></div>
@@ -189,17 +189,40 @@
   </div>
 </section>
 
-<!-- Notification toast example -->
-<section class="max-w-md mx-auto px-6 mt-4 mb-12">
-  <div class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 flex gap-3 items-start">
-    <div class="text-2xl">🔔</div>
-    <div>
-      <p class="font-semibold">Clock-in</p>
-      <p class="font-medium mt-0.5">Break is over</p>
-      <p class="text-sm text-slate-300">Your 30-minute break has ended.</p>
+<!-- Confirmation alert + notification examples -->
+<section class="max-w-6xl mx-auto px-6 mt-4 mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+
+  <div class="w-full max-w-md">
+    <div class="phone" style="height: auto;">
+      <div class="notch"></div>
+      <div class="screen justify-center" style="background: rgba(0,0,0,.55); padding: 80px 24px;">
+        <div class="bg-slate-700/95 rounded-2xl text-center overflow-hidden" style="backdrop-filter: blur(20px);">
+          <div class="px-6 py-5">
+            <p class="font-semibold text-base">Clock out?</p>
+            <p class="text-sm text-slate-200 mt-1">This ends your shift. You can't undo this.</p>
+          </div>
+          <div class="border-t border-slate-500/40 grid grid-cols-2">
+            <button class="py-3 text-blue-300 font-medium border-r border-slate-500/40">Cancel</button>
+            <button class="py-3 text-red-400 font-semibold">Clock out</button>
+          </div>
+        </div>
+      </div>
     </div>
+    <p class="caption">Confirmation before clocking out</p>
   </div>
-  <p class="caption">System notification (also fires after the 7.5h shift reminder)</p>
+
+  <div class="w-full max-w-md">
+    <div class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 flex gap-3 items-start">
+      <div class="text-2xl">🔔</div>
+      <div>
+        <p class="font-semibold">Clock-in</p>
+        <p class="font-medium mt-0.5">Break is over</p>
+        <p class="text-sm text-slate-300">Your 30-minute break has ended.</p>
+      </div>
+    </div>
+    <p class="caption">System notification (also fires for the 7.5h shift reminder)</p>
+  </div>
+
 </section>
 
 <!-- ────────────────────────────────  WEB ADMIN  ──────────────────────────────── -->
