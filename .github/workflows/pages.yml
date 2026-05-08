@@ -1,0 +1,39 @@
+name: Deploy mockups to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - claude/employee-clock-app-r5Eqg
+    paths:
+      - 'docs/mockups/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+# Allow only one Pages deploy at a time, but let in-flight runs finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      # Publish only docs/mockups so the site root IS the mockup gallery.
+      # Visit: https://<user>.github.io/<repo>/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/mockups
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
